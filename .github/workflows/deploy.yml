@@ -3,14 +3,10 @@ name: Deploy Rápido GitHub Pages
 on:
 push:
 branches:
-- main # Altere para 'master' se sua branch principal tiver esse nome
-
-Garante acesso de escrita na branch gh-pages sem precisar criar tokens manuais
+- main
 
 permissions:
 contents: write
-
-Cancela execuções anteriores na fila se você fizer um novo commit
 
 concurrency:
 group: "deploy-gh-pages"
@@ -24,7 +20,7 @@ steps:
 - name: Baixar arquivos do repositório
 uses: actions/checkout@v4
 
-  - name: Publicar direto na branch gh-pages (Sem fila do deploy-pages)
+  - name: Publicar direto na branch gh-pages
     uses: peaceiris/actions-gh-pages@v4
     with:
       github_token: ${{ secrets.GITHUB_TOKEN }}
