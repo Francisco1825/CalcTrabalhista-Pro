@@ -1,0 +1,2528 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CalcTrabalhista Pro • Rescisão CLT, Impostos, Férias e 13º (2026)</title>
+  <!-- Tailwind CSS via CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Google Fonts: Inter -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'sans-serif'],
+          },
+          colors: {
+            brand: {
+              50: '#eff6ff',
+              100: '#dbeafe',
+              500: '#3b82f6',
+              600: '#2563eb',
+              700: '#1d4ed8',
+              900: '#1e3a8a',
+            }
+          }
+        }
+      }
+    };
+  </script>
+  <style>
+    /* Estilos de Impressão Otimizados para PDF */
+    @media print {
+      body {
+        background: #ffffff !important;
+        color: #0f172a !important;
+        font-size: 12px;
+      }
+      .no-print {
+        display: none !important;
+      }
+      .print-only {
+        display: block !important;
+      }
+      .print-card {
+        box-shadow: none !important;
+        border: 1px solid #cbd5e1 !important;
+        break-inside: avoid;
+      }
+      .tab-panel.hidden {
+        display: none !important;
+      }
+    }
+    /* Customização sutil de barra de rolagem */
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #f1f5f9;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #cbd5e1;
+      border-radius: 9999px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #94a3b8;
+    }
+  </style>
+</head>
+<body class="bg-slate-50 text-slate-800 antialiased min-h-screen flex flex-col">
+
+  <!-- Cabeçalho / Navbar -->
+  <header class="bg-white border-b border-slate-200 sticky top-0 z-30 no-print">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between py-4 gap-3">
+        <!-- Logo e Título -->
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-600 to-indigo-700 flex items-center justify-center text-white shadow-sm">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z" />
+            </svg>
+          </div>
+          <div>
+            <div class="flex items-center gap-2">
+              <h1 class="text-lg sm:text-xl font-bold text-slate-900 tracking-tight">CalcTrabalhista Pro</h1>
+              <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200">
+                Regras CLT 2026
+              </span>
+            </div>
+            <p class="text-xs text-slate-500">Simulador completo de Rescisão, Holerite, Férias e 13º Salário</p>
+          </div>
+        </div>
+
+        <!-- Botões de Ação Rápida -->
+        <div class="flex items-center gap-2 self-start sm:self-auto">
+          <button id="btnPreencherExemplo" type="button"
+            class="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs sm:text-sm font-medium text-blue-700 bg-blue-50 hover:bg-blue-100 border border-blue-200 transition active:scale-[0.99]">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z" />
+            </svg>
+            Preencher Exemplo
+          </button>
+          <button id="btnImprimir" type="button"
+            class="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs sm:text-sm font-medium text-slate-700 bg-white hover:bg-slate-50 border border-slate-300 shadow-sm transition active:scale-[0.99]">
+            <svg class="w-4 h-4 text-slate-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z" />
+            </svg>
+            Imprimir / Salvar PDF
+          </button>
+        </div>
+      </div>
+
+      <!-- Abas de Navegação -->
+      <nav class="flex space-x-1 overflow-x-auto pb-0 border-t border-slate-100 pt-2" aria-label="Abas">
+        <button data-tab="rescisao" class="tab-btn group inline-flex items-center gap-2 px-4 py-2.5 text-sm font-semibold border-b-2 border-blue-600 text-blue-600 whitespace-nowrap transition">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+          </svg>
+          1. Cálculo de Rescisão CLT
+        </button>
+        <button data-tab="salario" class="tab-btn group inline-flex items-center gap-2 px-4 py-2.5 text-sm font-medium border-b-2 border-transparent text-slate-500 hover:text-slate-700 hover:border-slate-300 whitespace-nowrap transition">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+          </svg>
+          2. Salário Líquido & Impostos (INSS / IRRF)
+        </button>
+        <button data-tab="ferias13" class="tab-btn group inline-flex items-center gap-2 px-4 py-2.5 text-sm font-medium border-b-2 border-transparent text-slate-500 hover:text-slate-700 hover:border-slate-300 whitespace-nowrap transition">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+          </svg>
+          3. Férias & 13º Salário
+        </button>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Cabeçalho Exclusivo para Impressão -->
+  <div class="hidden print-only max-w-7xl mx-auto px-6 pt-6 pb-2 border-b border-slate-300">
+    <div class="flex justify-between items-center">
+      <div>
+        <h1 class="text-xl font-bold text-slate-900">Demonstrativo de Cálculo Trabalhista (CLT 2026)</h1>
+        <p class="text-xs text-slate-600">Simulação detalhada de verbas rescisórias, encargos e impostos</p>
+      </div>
+      <div class="text-right text-xs text-slate-500" id="printTimestamp"></div>
+    </div>
+  </div>
+
+  <!-- Toast de Feedback -->
+  <div id="toastBanner" class="fixed bottom-5 right-5 z-50 hidden transform transition-all duration-300 no-print">
+    <div class="bg-slate-900 text-white px-4 py-3 rounded-xl shadow-lg flex items-center gap-2.5 text-sm border border-slate-700">
+      <span class="w-2 h-2 rounded-full bg-emerald-400"></span>
+      <span id="toastMessage">Dados de exemplo preenchidos com sucesso!</span>
+    </div>
+  </div>
+
+  <!-- Conteúdo Principal -->
+  <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
+
+    <!-- ===================================================================== -->
+    <!-- ABA 1: CÁLCULO DE RESCISÃO CLT                                        -->
+    <!-- ===================================================================== -->
+    <section id="tab-rescisao" class="tab-panel space-y-6">
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+
+        <!-- Coluna Esquerda: Formulário de Entrada -->
+        <div class="lg:col-span-5 bg-white rounded-2xl border border-slate-200 shadow-sm p-5 sm:p-6 print-card">
+          <div class="flex items-center justify-between border-b border-slate-100 pb-4 mb-5">
+            <div>
+              <h2 class="text-base font-bold text-slate-900">Dados do Contrato e Desligamento</h2>
+              <p class="text-xs text-slate-500 mt-0.5">Preencha os parâmetros para cálculo automático em tempo real</p>
+            </div>
+            <button id="btnLimparRescisao" type="button" class="text-xs font-medium text-slate-500 hover:text-rose-600 transition no-print">
+              Limpar
+            </button>
+          </div>
+
+          <form id="formRescisao" class="space-y-4">
+            <!-- Salário Bruto -->
+            <div>
+              <label for="resSalario" class="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1.5">
+                Salário Base Mensal (R$)
+              </label>
+              <div class="relative">
+                <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center text-slate-400 font-medium text-sm">R$</span>
+                <input type="number" id="resSalario" step="0.01" min="0" value="4200.00"
+                  class="w-full pl-10 pr-4 py-2.5 rounded-xl border border-slate-300 text-slate-900 font-semibold focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition" />
+              </div>
+            </div>
+
+            <!-- Adicionais Legais e Médias Variáveis -->
+            <div class="bg-indigo-50/50 border border-indigo-200/80 rounded-xl p-3.5 space-y-3">
+              <div class="flex items-center justify-between gap-2">
+                <span class="text-xs font-bold text-indigo-950 uppercase tracking-wider flex items-center gap-1.5">
+                  <span class="w-2 h-2 rounded-full bg-indigo-600"></span>
+                  Adicionais & Médias Variáveis (CLT / TST)
+                </span>
+                <span id="resRemuneracaoBaseBadge" class="text-[11px] font-bold text-indigo-700 bg-white border border-indigo-200 px-2 py-0.5 rounded-md">
+                  Remun. Total: R$ 4.200,00
+                </span>
+              </div>
+
+              <!-- Carga Horária, Insalubridade e Periculosidade -->
+              <div class="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
+                <div>
+                  <label for="resJornadaMensal" class="block text-[11px] font-semibold text-slate-600 mb-1">
+                    Jornada Mensal
+                  </label>
+                  <select id="resJornadaMensal"
+                    class="w-full px-2.5 py-2 rounded-xl border border-slate-300 bg-white text-xs font-medium text-slate-900 focus:ring-2 focus:ring-blue-500 outline-none">
+                    <option value="220" selected>220h (44h/sem)</option>
+                    <option value="200">200h (40h/sem)</option>
+                    <option value="180">180h (36h/sem)</option>
+                    <option value="150">150h (30h/sem)</option>
+                  </select>
+                </div>
+                <div>
+                  <label for="resInsalubridade" class="block text-[11px] font-semibold text-slate-600 mb-1">
+                    Insalubridade (s/ SM)
+                  </label>
+                  <select id="resInsalubridade"
+                    class="w-full px-2.5 py-2 rounded-xl border border-slate-300 bg-white text-xs font-medium text-slate-900 focus:ring-2 focus:ring-blue-500 outline-none">
+                    <option value="0" selected>Não possui (0%)</option>
+                    <option value="0.10">Grau Mínimo (10%)</option>
+                    <option value="0.20">Grau Médio (20%)</option>
+                    <option value="0.40">Grau Máximo (40%)</option>
+                  </select>
+                </div>
+                <div class="flex flex-col justify-end pb-1">
+                  <label class="inline-flex items-center gap-1.5 cursor-pointer text-xs font-semibold text-slate-800 bg-white border border-slate-300 rounded-xl px-2.5 py-2">
+                    <input type="checkbox" id="resPericulosidade" class="w-4 h-4 rounded text-indigo-600 focus:ring-indigo-500" />
+                    Periculosidade (30%)
+                  </label>
+                </div>
+              </div>
+
+              <!-- Médias Mensais: Horas Extras Diurnas e Adicional Noturno -->
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+                <div>
+                  <label for="resHeDiurnaQtd" class="block text-[11px] font-semibold text-slate-600 mb-1">
+                    Média Horas Extras Diurnas/mês
+                  </label>
+                  <div class="flex gap-1.5">
+                    <input type="number" id="resHeDiurnaQtd" step="0.5" min="0" value="0" placeholder="Horas"
+                      class="w-full px-2.5 py-1.5 rounded-xl border border-slate-300 bg-white text-xs font-semibold text-slate-900 focus:ring-2 focus:ring-blue-500 outline-none" />
+                    <select id="resHeDiurnaPct"
+                      class="px-2 py-1.5 rounded-xl border border-slate-300 bg-white text-xs font-medium text-slate-800 focus:ring-2 focus:ring-blue-500 outline-none">
+                      <option value="50" selected>+50%</option>
+                      <option value="60">+60%</option>
+                      <option value="75">+75%</option>
+                      <option value="100">+100%</option>
+                    </select>
+                  </div>
+                </div>
+                <div>
+                  <label for="resHorasNoturnasQtd" class="block text-[11px] font-semibold text-slate-600 mb-1">
+                    Horas Noturnas Normais (22h–05h)
+                  </label>
+                  <input type="number" id="resHorasNoturnasQtd" step="0.5" min="0" value="0" placeholder="Ex: 40h/mês"
+                    class="w-full px-2.5 py-1.5 rounded-xl border border-slate-300 bg-white text-xs font-semibold text-slate-900 focus:ring-2 focus:ring-blue-500 outline-none" />
+                </div>
+              </div>
+
+              <!-- Opção: Trabalha exclusivamente à noite -->
+              <div class="flex flex-wrap items-center justify-between gap-2 bg-indigo-100/70 border border-indigo-200 rounded-xl px-2.5 py-1.5">
+                <label class="inline-flex items-center gap-1.5 cursor-pointer text-[11px] font-bold text-indigo-950" title="Estima automaticamente as horas noturnas normais no mês conforme a jornada selecionada e permite ajuste manual">
+                  <input type="checkbox" id="resSoNoite" class="w-3.5 h-3.5 rounded text-indigo-600 focus:ring-indigo-500" />
+                  Trabalha só à noite (noturno fixo)
+                </label>
+                <span id="resSoNoiteInfo" class="text-[10px] font-semibold text-indigo-700">Turno misto / manual</span>
+              </div>
+
+              <!-- Horário de Trabalho Diário (Entrada / Saída) - Rescisão -->
+              <div class="bg-white/90 border border-indigo-200/80 rounded-xl p-2.5 space-y-2">
+                <div class="flex items-center justify-between gap-2">
+                  <span class="text-[11px] font-bold text-slate-800">Horário de Trabalho Diário</span>
+                  <span id="resHorarioResumo" class="text-[10px] font-semibold text-indigo-700">Jornada: 8h/dia • Noturno: 0h/dia</span>
+                </div>
+                <div class="grid grid-cols-3 gap-2 items-end">
+                  <div>
+                    <label for="resHoraEntrada" class="block text-[10px] font-semibold text-slate-600 mb-0.5">Entrada</label>
+                    <input type="time" id="resHoraEntrada" value="08:00"
+                      class="w-full px-2 py-1 rounded-lg border border-slate-300 bg-white text-xs font-semibold text-slate-900 focus:ring-2 focus:ring-blue-500 outline-none" />
+                  </div>
+                  <div>
+                    <label for="resHoraSaida" class="block text-[10px] font-semibold text-slate-600 mb-0.5">Saída</label>
+                    <input type="time" id="resHoraSaida" value="17:00"
+                      class="w-full px-2 py-1 rounded-lg border border-slate-300 bg-white text-xs font-semibold text-slate-900 focus:ring-2 focus:ring-blue-500 outline-none" />
+                  </div>
+                  <div>
+                    <label for="resIntervaloMin" class="block text-[10px] font-semibold text-slate-600 mb-0.5">Intervalo (min)</label>
+                    <input type="number" id="resIntervaloMin" step="15" min="0" max="240" value="60"
+                      class="w-full px-2 py-1 rounded-lg border border-slate-300 bg-white text-xs font-semibold text-slate-900 focus:ring-2 focus:ring-blue-500 outline-none" />
+                  </div>
+                </div>
+                <div class="flex items-center justify-between pt-0.5">
+                  <span class="text-[10px] text-slate-500">Calcula horas noturnas (22h–05h) pela escala</span>
+                  <button type="button" id="resAplicarHorarioBtn"
+                    class="text-[10px] font-bold text-indigo-700 hover:text-indigo-900 underline cursor-pointer">
+                    Aplicar às horas noturnas/mês
+                  </button>
+                </div>
+              </div>
+
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5 items-end">
+                <div>
+                  <label for="resHeNoturnaQtd" class="block text-[11px] font-semibold text-slate-600 mb-1">
+                    Média Horas Extras Noturnas/mês
+                  </label>
+                  <input type="number" id="resHeNoturnaQtd" step="0.5" min="0" value="0" placeholder="Ex: 10h/mês"
+                    class="w-full px-2.5 py-1.5 rounded-xl border border-slate-300 bg-white text-xs font-semibold text-slate-900 focus:ring-2 focus:ring-blue-500 outline-none" />
+                </div>
+                <div class="flex items-center justify-between bg-white border border-slate-200 rounded-xl px-2.5 py-1.5">
+                  <label class="inline-flex items-center gap-1.5 cursor-pointer text-[11px] font-medium text-slate-700" title="Aplica fator 60 / 52,5 = 1,142857 da hora noturna reduzida (Art. 73 §1º CLT)">
+                    <input type="checkbox" id="resReducaoHoraNoturna" checked class="w-3.5 h-3.5 rounded text-indigo-600" />
+                    Hora reduzida (52m30s)
+                  </label>
+                  <label class="inline-flex items-center gap-1 cursor-pointer text-[11px] font-medium text-slate-700" title="Reflexo de Descanso Semanal Remunerado (DSR) sobre HE e Adicional Noturno (Súmula 172 TST)">
+                    <input type="checkbox" id="resIncluirDsr" checked class="w-3.5 h-3.5 rounded text-indigo-600" />
+                    +DSR
+                  </label>
+                </div>
+              </div>
+
+              <!-- Resumo em tempo real dos adicionais e médias -->
+              <div id="resAdicionaisResumoBox" class="text-[11px] text-slate-600 bg-white border border-indigo-100 rounded-lg px-2.5 py-2 space-y-0.5">
+                <div class="flex justify-between">
+                  <span>Insalub./Pericul.: <strong class="text-slate-900">R$ 0,00</strong></span>
+                  <span>Adic. Noturno: <strong class="text-slate-900">R$ 0,00</strong></span>
+                </div>
+                <div class="flex justify-between">
+                  <span>Média HE (Diur.+Not.+DSR): <strong class="text-indigo-700">R$ 0,00/mês</strong></span>
+                  <span>Hora Base: <strong class="text-slate-900">R$ 19,09</strong></span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Datas de Admissão e Demissão -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <div>
+                <label for="resAdmissao" class="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1.5">
+                  Data de Admissão
+                </label>
+                <input type="date" id="resAdmissao" value="2023-03-10"
+                  class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-sm text-slate-900 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition" />
+              </div>
+              <div>
+                <label for="resDemissao" class="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1.5">
+                  Data de Demissão
+                </label>
+                <input type="date" id="resDemissao" value="2026-11-20"
+                  class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-sm text-slate-900 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition" />
+              </div>
+            </div>
+
+            <!-- Badge de Tempo de Casa Calculado -->
+            <div id="tempoCasaBox" class="bg-slate-50 border border-slate-200/80 rounded-xl px-3.5 py-2.5 flex items-center justify-between text-xs">
+              <span class="text-slate-600 font-medium">Tempo de vínculo calculado:</span>
+              <span id="tempoCasaTexto" class="font-bold text-blue-700">3 anos, 8 meses e 11 dias</span>
+            </div>
+
+            <!-- Motivo da Rescisão -->
+            <div>
+              <label for="resMotivo" class="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1.5">
+                Motivo da Rescisão
+              </label>
+              <select id="resMotivo"
+                class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-sm font-medium text-slate-900 bg-white focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition">
+                <option value="sem_justa_causa">Dispensa sem justa causa (pelo empregador)</option>
+                <option value="pedido_demissao">Pedido de demissão (pelo empregado)</option>
+                <option value="acordo">Rescisão por acordo mútuo (Art. 484-A CLT)</option>
+                <option value="justa_causa">Dispensa por justa causa</option>
+                <option value="termino_experiencia">Término de contrato de experiência (no prazo)</option>
+              </select>
+            </div>
+
+            <!-- Aviso Prévio -->
+            <div>
+              <label for="resAviso" class="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1.5">
+                Situação do Aviso Prévio
+              </label>
+              <select id="resAviso"
+                class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-sm font-medium text-slate-900 bg-white focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition">
+                <option value="indenizado">Indenizado (pago na rescisão)</option>
+                <option value="trabalhado">Trabalhado (cumprido até a data de demissão)</option>
+                <option value="nao_cumprido">Não cumprido / Dispensado (desconto se pedido)</option>
+              </select>
+              <p id="avisoHint" class="text-[11px] text-slate-500 mt-1">
+                Lei 12.506/11: 30 dias + 3 dias por ano completo trabalhado (máx. 90 dias).
+              </p>
+            </div>
+
+            <!-- Saldo FGTS e Dependentes -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <div>
+                <div class="flex items-center justify-between mb-1.5">
+                  <label for="resFgtsSaldo" class="block text-xs font-semibold text-slate-700 uppercase tracking-wider">
+                    Saldo FGTS Acumulado (R$)
+                  </label>
+                  <label class="inline-flex items-center gap-1 cursor-pointer text-[11px] font-semibold text-blue-700">
+                    <input type="checkbox" id="resFgtsAuto" checked class="w-3.5 h-3.5 rounded text-blue-600 focus:ring-blue-500" />
+                    Auto (8% × meses)
+                  </label>
+                </div>
+                <input type="number" id="resFgtsSaldo" step="0.01" min="0" value="14800.00"
+                  class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-sm text-slate-900 font-medium focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition" />
+                <p id="resFgtsAutoInfo" class="text-[11px] text-emerald-700 mt-1">
+                  Auto: 8% × meses trabalhados (inclui 13º)
+                </p>
+              </div>
+              <div>
+                <label for="resDependentes" class="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1.5">
+                  Dependentes (IRRF)
+                </label>
+                <input type="number" id="resDependentes" step="1" min="0" max="20" value="1"
+                  class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-sm text-slate-900 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition" />
+              </div>
+            </div>
+
+            <!-- Férias Vencidas -->
+            <div class="flex items-center justify-between bg-slate-50 border border-slate-200 rounded-xl p-3.5">
+              <div>
+                <span class="block text-sm font-semibold text-slate-800">Possui Férias Vencidas?</span>
+                <span class="text-xs text-slate-500">Período aquisitivo completo ainda não gozado</span>
+              </div>
+              <label class="inline-flex items-center cursor-pointer">
+                <input type="checkbox" id="resFeriasVencidas" class="sr-only peer" />
+                <div class="relative w-11 h-6 bg-slate-300 peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
+              </label>
+            </div>
+
+            <!-- Seção de Benefícios na Rescisão (VR/VA e VT) -->
+            <div class="pt-3 border-t border-slate-100 space-y-3.5">
+              <div class="flex items-center justify-between">
+                <span class="text-xs font-bold text-slate-800 uppercase tracking-wider flex items-center gap-1.5">
+                  <span class="w-2 h-2 rounded-full bg-amber-500"></span>
+                  Benefícios (VR/VA & Vale-Transporte por Dia)
+                </span>
+                <span class="text-[11px] text-slate-400">Regras PAT / Lei 7.418</span>
+              </div>
+
+              <!-- Subbloco VR/VA por Dia -->
+              <div class="bg-slate-50/90 border border-slate-200/80 rounded-xl p-3 space-y-2.5">
+                <div class="flex items-center justify-between">
+                  <span class="text-xs font-bold text-slate-700">Vale-Refeição / Alimentação (VR/VA)</span>
+                  <span id="resVrVaMensalPreview" class="text-[11px] font-semibold text-emerald-700 bg-emerald-50 border border-emerald-200 px-2 py-0.5 rounded-md">
+                    Base mês: R$ 770,00
+                  </span>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
+                  <div>
+                    <label for="resVrVaDiaria" class="block text-[11px] font-semibold text-slate-600 mb-1">
+                      Diária VR/VA (R$/dia)
+                    </label>
+                    <input type="number" id="resVrVaDiaria" step="0.01" min="0" value="35.00"
+                      class="w-full px-3 py-2 rounded-xl border border-slate-300 bg-white text-sm text-slate-900 focus:ring-2 focus:ring-blue-500 outline-none transition" />
+                  </div>
+                  <div>
+                    <label for="resVrVaDiasMes" class="block text-[11px] font-semibold text-slate-600 mb-1">
+                      Dias Úteis (Mês)
+                    </label>
+                    <input type="number" id="resVrVaDiasMes" step="1" min="1" max="31" value="22"
+                      class="w-full px-3 py-2 rounded-xl border border-slate-300 bg-white text-sm text-slate-900 focus:ring-2 focus:ring-blue-500 outline-none transition" />
+                  </div>
+                  <div>
+                    <label for="resVrVaCopart" class="block text-[11px] font-semibold text-slate-600 mb-1">
+                      Coparticipação (%)
+                    </label>
+                    <input type="number" id="resVrVaCopart" step="0.5" min="0" max="20" value="0"
+                      title="Máximo legal PAT: 20% do valor do benefício"
+                      class="w-full px-3 py-2 rounded-xl border border-slate-300 bg-white text-sm text-slate-900 focus:ring-2 focus:ring-blue-500 outline-none transition" />
+                  </div>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-12 gap-2.5 items-end">
+                  <div class="sm:col-span-4">
+                    <label for="resDiasUteisTrab" class="block text-[11px] font-semibold text-slate-600 mb-1">
+                      Dias Úteis Trab. (Mês)
+                    </label>
+                    <input type="number" id="resDiasUteisTrab" step="1" min="0" max="31" value="15"
+                      title="Estimado automaticamente pela data de demissão; editável manualmente"
+                      class="w-full px-3 py-2 rounded-xl border border-slate-300 bg-white text-sm font-semibold text-blue-700 focus:ring-2 focus:ring-blue-500 outline-none transition" />
+                  </div>
+                  <div class="sm:col-span-8">
+                    <label for="resVrVaModo" class="block text-[11px] font-semibold text-slate-600 mb-1">
+                      Tratamento na Rescisão
+                    </label>
+                    <select id="resVrVaModo"
+                      class="w-full px-3 py-2 rounded-xl border border-slate-300 text-xs font-medium text-slate-900 bg-white focus:ring-2 focus:ring-blue-500 outline-none transition">
+                      <option value="receber_prop">Pago proporcionalmente (receber dias trab.)</option>
+                      <option value="descontar_nao_trab">Creditado no início do mês (descontar dias rest.)</option>
+                      <option value="ignorar">Não considerar VR/VA na rescisão</option>
+                    </select>
+                  </div>
+                </div>
+
+                <!-- Resumo Dinâmico VR/VA Rescisão -->
+                <div id="resVrVaResumoBox" class="text-[11px] text-slate-600 bg-white border border-slate-200/80 rounded-lg px-2.5 py-2 flex flex-wrap items-center justify-between gap-1">
+                  <span>Proporcional (15d): <strong class="text-slate-900">R$ 525,00</strong></span>
+                  <span>Copart.: <strong class="text-slate-900">R$ 0,00</strong></span>
+                </div>
+              </div>
+
+              <!-- Subbloco Vale-Transporte por Dia -->
+              <div class="bg-slate-50/90 border border-slate-200/80 rounded-xl p-3 space-y-2.5">
+                <div class="flex items-center justify-between">
+                  <span class="text-xs font-bold text-slate-700">Vale-Transporte (Ida + Volta)</span>
+                  <label class="inline-flex items-center gap-1.5 cursor-pointer text-xs font-semibold text-blue-700">
+                    <input type="checkbox" id="resVtOptante" checked class="w-4 h-4 rounded text-blue-600 focus:ring-blue-500" />
+                    Optante VT
+                  </label>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+                  <div>
+                    <label for="resVtDiaria" class="block text-[11px] font-semibold text-slate-600 mb-1">
+                      Valor Diário VT (R$/dia)
+                    </label>
+                    <input type="number" id="resVtDiaria" step="0.01" min="0" value="11.00"
+                      class="w-full px-3 py-2 rounded-xl border border-slate-300 bg-white text-sm text-slate-900 focus:ring-2 focus:ring-blue-500 outline-none transition" />
+                  </div>
+                  <div>
+                    <label for="resVtDiasTrab" class="block text-[11px] font-semibold text-slate-600 mb-1">
+                      Dias Úteis VT no Mês
+                    </label>
+                    <input type="number" id="resVtDiasTrab" step="1" min="0" max="31" value="15"
+                      class="w-full px-3 py-2 rounded-xl border border-slate-300 bg-white text-sm font-semibold text-blue-700 focus:ring-2 focus:ring-blue-500 outline-none transition" />
+                  </div>
+                </div>
+
+                <!-- Resumo Dinâmico VT Rescisão -->
+                <div id="resVtResumoBox" class="text-[11px] text-slate-600 bg-white border border-slate-200/80 rounded-lg px-2.5 py-2 flex flex-wrap items-center justify-between gap-1">
+                  <span>VT Utilizado: <strong class="text-slate-900">R$ 165,00</strong></span>
+                  <span>Desc. CLT (menor entre 6% e VT): <strong class="text-rose-600">- R$ 165,00</strong></span>
+                </div>
+              </div>
+            </div>
+          </form>
+        </div>
+
+        <!-- Coluna Direita: Resultados e Demonstrativo -->
+        <div class="lg:col-span-7 space-y-5">
+
+          <!-- Cartões de Resumo Principal -->
+          <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-3.5">
+            <!-- Total Bruto -->
+            <div class="bg-white rounded-2xl border border-slate-200 p-4 shadow-sm print-card">
+              <span class="text-xs font-semibold text-slate-500 uppercase tracking-wider">Total Proventos</span>
+              <div id="cardResBruto" class="text-xl font-extrabold text-slate-900 mt-1">R$ 0,00</div>
+              <span class="text-[11px] text-emerald-600 font-medium mt-1 inline-block">Verbas rescisórias brutas</span>
+            </div>
+
+            <!-- Total Descontos -->
+            <div class="bg-white rounded-2xl border border-slate-200 p-4 shadow-sm print-card">
+              <span class="text-xs font-semibold text-slate-500 uppercase tracking-wider">Total Descontos</span>
+              <div id="cardResDescontos" class="text-xl font-extrabold text-rose-600 mt-1">- R$ 0,00</div>
+              <span class="text-[11px] text-slate-500 mt-1 inline-block">INSS, IRRF, VT e eventuais</span>
+            </div>
+
+            <!-- Líquido Rescisão -->
+            <div class="bg-gradient-to-br from-blue-600 to-indigo-700 rounded-2xl p-4 shadow-md text-white print-card">
+              <span class="text-xs font-semibold text-blue-100 uppercase tracking-wider">Líquido Rescisão</span>
+              <div id="cardResLiquido" class="text-xl font-extrabold mt-1">R$ 0,00</div>
+              <span id="cardResLiquidoSub" class="text-[11px] text-blue-100 mt-1 inline-block">Depósito direto + benefícios</span>
+            </div>
+
+            <!-- Saque FGTS Estimado -->
+            <div class="bg-emerald-50 border border-emerald-200 rounded-2xl p-4 shadow-sm print-card">
+              <span class="text-xs font-semibold text-emerald-800 uppercase tracking-wider">Saque FGTS + Multa</span>
+              <div id="cardResFgtsTotal" class="text-xl font-extrabold text-emerald-700 mt-1">R$ 0,00</div>
+              <span id="cardResFgtsSub" class="text-[11px] text-emerald-700 font-medium mt-1 inline-block">Multa 40% inclusa</span>
+            </div>
+          </div>
+
+          <!-- Tabela Discriminada de Verbas Rescisórias -->
+          <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden print-card">
+            <div class="px-5 py-4 border-b border-slate-100 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+              <div>
+                <h3 class="text-base font-bold text-slate-900">Discriminação das Verbas Rescisórias (TRCT)</h3>
+                <p class="text-xs text-slate-500">Detalhamento de proventos tributáveis, indenizatórios e deduções legais</p>
+              </div>
+              <span id="badgeRegimeIr" class="inline-flex items-center px-2.5 py-1 rounded-lg text-xs font-semibold bg-indigo-50 text-indigo-700 border border-indigo-200">
+                IRRF: Dedução Simplificada
+              </span>
+            </div>
+
+            <div class="overflow-x-auto">
+              <table class="w-full text-left border-collapse">
+                <thead>
+                  <tr class="bg-slate-50 border-b border-slate-200 text-[11px] font-bold text-slate-500 uppercase tracking-wider">
+                    <th class="py-3 px-5">Rubrica / Descrição</th>
+                    <th class="py-3 px-4">Referência</th>
+                    <th class="py-3 px-4 text-right">Proventos (+)</th>
+                    <th class="py-3 px-5 text-right">Descontos (-)</th>
+                  </tr>
+                </thead>
+                <tbody id="tabelaRescisaoBody" class="divide-y divide-slate-100 text-sm">
+                  <!-- Preenchido via JS -->
+                </tbody>
+                <tfoot class="bg-slate-50 border-t-2 border-slate-200 font-bold text-sm">
+                  <tr>
+                    <td colspan="2" class="py-3.5 px-5 text-slate-700">Totais da Rescisão</td>
+                    <td id="footResProventos" class="py-3.5 px-4 text-right text-emerald-700">R$ 0,00</td>
+                    <td id="footResDescontos" class="py-3.5 px-5 text-right text-rose-600">R$ 0,00</td>
+                  </tr>
+                </tfoot>
+              </table>
+            </div>
+          </div>
+
+          <!-- Painel Informativo do FGTS e Seguro Desemprego -->
+          <div class="bg-white rounded-2xl border border-slate-200 p-5 shadow-sm print-card">
+            <h4 class="text-sm font-bold text-slate-900 mb-3 flex items-center gap-2">
+              <svg class="w-4 h-4 text-emerald-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+              Demonstrativo FGTS, Benefícios e Direitos Acessórios
+            </h4>
+            <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-3.5 text-xs">
+              <div class="bg-slate-50 rounded-xl p-3 border border-slate-100">
+                <span class="text-slate-500 block">FGTS sobre Rescisão (8%)</span>
+                <span id="fgtsMesValor" class="text-sm font-bold text-slate-900 mt-0.5 block">R$ 0,00</span>
+              </div>
+              <div class="bg-slate-50 rounded-xl p-3 border border-slate-100">
+                <span id="fgtsMultaLabel" class="text-slate-500 block">Multa Rescisória FGTS (40%)</span>
+                <span id="fgtsMultaValor" class="text-sm font-bold text-emerald-700 mt-0.5 block">R$ 0,00</span>
+              </div>
+              <div class="bg-amber-50/70 rounded-xl p-3 border border-amber-200/80">
+                <span class="text-amber-900 block font-medium">Saldo VR/VA + VT Proporcional</span>
+                <span id="resBeneficiosResumo" class="text-sm font-bold text-amber-800 mt-0.5 block">R$ 0,00</span>
+              </div>
+              <div class="bg-slate-50 rounded-xl p-3 border border-slate-100">
+                <span class="text-slate-500 block">Saque FGTS & Seguro</span>
+                <span id="fgtsStatusSaque" class="text-sm font-bold text-blue-700 mt-0.5 block">Liberado (Chave 01)</span>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================================================================== -->
+    <!-- ABA 2: SALÁRIO LÍQUIDO & IMPOSTOS (INSS / IRRF)                       -->
+    <!-- ===================================================================== -->
+    <section id="tab-salario" class="tab-panel hidden space-y-6">
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+
+        <!-- Formulário Holerite -->
+        <div class="lg:col-span-5 bg-white rounded-2xl border border-slate-200 shadow-sm p-5 sm:p-6 print-card">
+          <div class="flex items-center justify-between border-b border-slate-100 pb-4 mb-5">
+            <div>
+              <h2 class="text-base font-bold text-slate-900">Calculadora de Salário Líquido & Benefícios</h2>
+              <p class="text-xs text-slate-500 mt-0.5">Simule seu holerite mensal com tabelas 2026, VR/VA e VT</p>
+            </div>
+            <button id="btnLimparSalario" type="button" class="text-xs font-medium text-slate-500 hover:text-rose-600 transition no-print">
+              Limpar
+            </button>
+          </div>
+
+          <div class="space-y-4">
+            <div>
+              <label for="salBruto" class="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1.5">
+                Salário Base Mensal (R$)
+              </label>
+              <div class="relative">
+                <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center text-slate-400 font-medium text-sm">R$</span>
+                <input type="number" id="salBruto" step="0.01" min="0" value="5500.00"
+                  class="w-full pl-10 pr-4 py-2.5 rounded-xl border border-slate-300 text-slate-900 font-semibold focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition" />
+              </div>
+            </div>
+
+            <!-- Adicionais e Horas Extras no Holerite Mensal -->
+            <div class="bg-indigo-50/50 border border-indigo-200/80 rounded-xl p-3.5 space-y-2.5">
+              <div class="flex items-center justify-between">
+                <span class="text-xs font-bold text-indigo-950 uppercase tracking-wider flex items-center gap-1.5">
+                  <span class="w-2 h-2 rounded-full bg-indigo-600"></span>
+                  Adicionais, Noturno & Horas Extras
+                </span>
+                <span id="salTotalAdicionaisBadge" class="text-[11px] font-bold text-indigo-700 bg-white border border-indigo-200 px-2 py-0.5 rounded-md">
+                  + R$ 0,00
+                </span>
+              </div>
+
+              <div class="grid grid-cols-1 sm:grid-cols-3 gap-2">
+                <div>
+                  <label for="salJornadaMensal" class="block text-[11px] font-semibold text-slate-600 mb-1">Jornada</label>
+                  <select id="salJornadaMensal" class="w-full px-2 py-1.5 rounded-xl border border-slate-300 bg-white text-xs text-slate-900">
+                    <option value="220" selected>220h/mês</option>
+                    <option value="200">200h/mês</option>
+                    <option value="180">180h/mês</option>
+                    <option value="150">150h/mês</option>
+                  </select>
+                </div>
+                <div>
+                  <label for="salInsalubridade" class="block text-[11px] font-semibold text-slate-600 mb-1">Insalubridade</label>
+                  <select id="salInsalubridade" class="w-full px-2 py-1.5 rounded-xl border border-slate-300 bg-white text-xs text-slate-900">
+                    <option value="0" selected>0% (Nenhuma)</option>
+                    <option value="0.10">10% (Mínimo)</option>
+                    <option value="0.20">20% (Médio)</option>
+                    <option value="0.40">40% (Máximo)</option>
+                  </select>
+                </div>
+                <div class="flex items-end">
+                  <label class="w-full inline-flex items-center gap-1.5 cursor-pointer text-xs font-semibold text-slate-800 bg-white border border-slate-300 rounded-xl px-2 py-1.5">
+                    <input type="checkbox" id="salPericulosidade" class="w-3.5 h-3.5 rounded text-indigo-600" />
+                    Pericul. 30%
+                  </label>
+                </div>
+              </div>
+
+              <div class="grid grid-cols-1 sm:grid-cols-3 gap-2">
+                <div>
+                  <label for="salHeDiurnaQtd" class="block text-[11px] font-semibold text-slate-600 mb-1">HE Diurna (h)</label>
+                  <div class="flex gap-1">
+                    <input type="number" id="salHeDiurnaQtd" step="0.5" min="0" value="0"
+                      class="w-full px-2 py-1.5 rounded-xl border border-slate-300 bg-white text-xs font-semibold text-slate-900" />
+                    <select id="salHeDiurnaPct" class="px-1.5 py-1.5 rounded-xl border border-slate-300 bg-white text-[11px]">
+                      <option value="50" selected>50%</option>
+                      <option value="60">60%</option>
+                      <option value="75">75%</option>
+                      <option value="100">100%</option>
+                    </select>
+                  </div>
+                </div>
+                <div>
+                  <label for="salHorasNoturnasQtd" class="block text-[11px] font-semibold text-slate-600 mb-1">Noturna 20% (h)</label>
+                  <input type="number" id="salHorasNoturnasQtd" step="0.5" min="0" value="0"
+                    class="w-full px-2 py-1.5 rounded-xl border border-slate-300 bg-white text-xs font-semibold text-slate-900" />
+                </div>
+                <div>
+                  <label for="salHeNoturnaQtd" class="block text-[11px] font-semibold text-slate-600 mb-1">HE Noturna (h)</label>
+                  <input type="number" id="salHeNoturnaQtd" step="0.5" min="0" value="0"
+                    class="w-full px-2 py-1.5 rounded-xl border border-slate-300 bg-white text-xs font-semibold text-slate-900" />
+                </div>
+              </div>
+
+              <div class="flex items-center justify-between bg-indigo-100/70 border border-indigo-200 rounded-xl px-2.5 py-1.5 text-[11px]">
+                <label class="inline-flex items-center gap-1.5 cursor-pointer font-bold text-indigo-950">
+                  <input type="checkbox" id="salSoNoite" class="w-3.5 h-3.5 rounded text-indigo-600" />
+                  Trabalha só à noite (noturno fixo)
+                </label>
+                <span id="salSoNoiteInfo" class="text-[10px] font-semibold text-indigo-700">Turno misto / manual</span>
+              </div>
+
+              <!-- Horário de Trabalho Diário (Entrada / Saída) - Salário -->
+              <div class="bg-white/90 border border-indigo-200/80 rounded-xl p-2.5 space-y-2">
+                <div class="flex items-center justify-between gap-2">
+                  <span class="text-[11px] font-bold text-slate-800">Horário de Trabalho Diário</span>
+                  <span id="salHorarioResumo" class="text-[10px] font-semibold text-indigo-700">Jornada: 8h/dia • Noturno: 0h/dia</span>
+                </div>
+                <div class="grid grid-cols-3 gap-2 items-end">
+                  <div>
+                    <label for="salHoraEntrada" class="block text-[10px] font-semibold text-slate-600 mb-0.5">Entrada</label>
+                    <input type="time" id="salHoraEntrada" value="08:00"
+                      class="w-full px-2 py-1 rounded-lg border border-slate-300 bg-white text-xs font-semibold text-slate-900 focus:ring-2 focus:ring-blue-500 outline-none" />
+                  </div>
+                  <div>
+                    <label for="salHoraSaida" class="block text-[10px] font-semibold text-slate-600 mb-0.5">Saída</label>
+                    <input type="time" id="salHoraSaida" value="17:00"
+                      class="w-full px-2 py-1 rounded-lg border border-slate-300 bg-white text-xs font-semibold text-slate-900 focus:ring-2 focus:ring-blue-500 outline-none" />
+                  </div>
+                  <div>
+                    <label for="salIntervaloMin" class="block text-[10px] font-semibold text-slate-600 mb-0.5">Intervalo (min)</label>
+                    <input type="number" id="salIntervaloMin" step="15" min="0" max="240" value="60"
+                      class="w-full px-2 py-1 rounded-lg border border-slate-300 bg-white text-xs font-semibold text-slate-900 focus:ring-2 focus:ring-blue-500 outline-none" />
+                  </div>
+                </div>
+                <div class="flex items-center justify-between pt-0.5">
+                  <span class="text-[10px] text-slate-500">Calcula horas noturnas (22h–05h) pela escala</span>
+                  <button type="button" id="salAplicarHorarioBtn"
+                    class="text-[10px] font-bold text-indigo-700 hover:text-indigo-900 underline cursor-pointer">
+                    Aplicar às horas noturnas/mês
+                  </button>
+                </div>
+              </div>
+
+              <div class="flex items-center justify-between text-[11px] text-slate-600 pt-0.5">
+                <label class="inline-flex items-center gap-1.5 cursor-pointer">
+                  <input type="checkbox" id="salReducaoHoraNoturna" checked class="w-3.5 h-3.5 rounded text-indigo-600" />
+                  Hora noturna reduzida (52m30s)
+                </label>
+                <label class="inline-flex items-center gap-1.5 cursor-pointer">
+                  <input type="checkbox" id="salIncluirDsr" checked class="w-3.5 h-3.5 rounded text-indigo-600" />
+                  Reflexo DSR (Súm. 172 TST)
+                </label>
+              </div>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <div>
+                <label for="salDependentes" class="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1.5">
+                  Nº de Dependentes
+                </label>
+                <input type="number" id="salDependentes" step="1" min="0" max="20" value="0"
+                  class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-sm text-slate-900 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition" />
+              </div>
+              <div>
+                <label for="salOutrosDescontos" class="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1.5">
+                  Outros Descontos (R$)
+                </label>
+                <input type="number" id="salOutrosDescontos" step="0.01" min="0" value="120.00"
+                  placeholder="Ex: Plano Saúde, Odonto"
+                  class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-sm text-slate-900 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition" />
+              </div>
+            </div>
+
+            <!-- Seção VR/VA e VT no Holerite -->
+            <div class="pt-3 border-t border-slate-100 space-y-3.5">
+              <span class="text-xs font-bold text-slate-800 uppercase tracking-wider flex items-center gap-1.5">
+                <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
+                Benefícios Mensais por Dia (VR / VA e VT)
+              </span>
+
+              <!-- Subbloco VR/VA Mensal -->
+              <div class="bg-slate-50/90 border border-slate-200/80 rounded-xl p-3 space-y-2.5">
+                <div class="flex items-center justify-between">
+                  <span class="text-xs font-bold text-slate-700">Vale-Refeição / Alimentação (VR/VA)</span>
+                  <span id="salVrVaTotalPreview" class="text-[11px] font-bold text-emerald-700 bg-emerald-50 border border-emerald-200 px-2 py-0.5 rounded-md">
+                    Total: R$ 770,00/mês
+                  </span>
+                </div>
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
+                  <div>
+                    <label for="salVrVaDiaria" class="block text-[11px] font-semibold text-slate-600 mb-1">
+                      Diária VR/VA (R$/dia)
+                    </label>
+                    <input type="number" id="salVrVaDiaria" step="0.01" min="0" value="35.00"
+                      class="w-full px-3 py-2 rounded-xl border border-slate-300 bg-white text-sm text-slate-900 focus:ring-2 focus:ring-blue-500 outline-none transition" />
+                  </div>
+                  <div>
+                    <label for="salVrVaDias" class="block text-[11px] font-semibold text-slate-600 mb-1">
+                      Dias Úteis / Mês
+                    </label>
+                    <input type="number" id="salVrVaDias" step="1" min="1" max="31" value="22"
+                      class="w-full px-3 py-2 rounded-xl border border-slate-300 bg-white text-sm text-slate-900 focus:ring-2 focus:ring-blue-500 outline-none transition" />
+                  </div>
+                  <div>
+                    <label for="salVrVaCopart" class="block text-[11px] font-semibold text-slate-600 mb-1">
+                      Coparticipação (%)
+                    </label>
+                    <input type="number" id="salVrVaCopart" step="0.5" min="0" max="20" value="0"
+                      title="Até 20% conforme regras do PAT"
+                      class="w-full px-3 py-2 rounded-xl border border-slate-300 bg-white text-sm text-slate-900 focus:ring-2 focus:ring-blue-500 outline-none transition" />
+                  </div>
+                </div>
+              </div>
+
+              <!-- Subbloco Vale-Transporte Mensal -->
+              <div class="bg-slate-50/90 border border-slate-200/80 rounded-xl p-3 space-y-2.5">
+                <div class="flex items-center justify-between">
+                  <span class="text-xs font-bold text-slate-700">Vale-Transporte (Ida + Volta)</span>
+                  <label class="inline-flex items-center gap-1.5 cursor-pointer text-xs font-semibold text-blue-700">
+                    <input type="checkbox" id="salValeTransporte" checked class="w-4 h-4 rounded text-blue-600 focus:ring-blue-500" />
+                    Optante VT (6%)
+                  </label>
+                </div>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+                  <div>
+                    <label for="salVtDiaria" class="block text-[11px] font-semibold text-slate-600 mb-1">
+                      Diária VT (R$/dia)
+                    </label>
+                    <input type="number" id="salVtDiaria" step="0.01" min="0" value="11.00"
+                      class="w-full px-3 py-2 rounded-xl border border-slate-300 bg-white text-sm text-slate-900 focus:ring-2 focus:ring-blue-500 outline-none transition" />
+                  </div>
+                  <div>
+                    <label for="salVtDias" class="block text-[11px] font-semibold text-slate-600 mb-1">
+                      Dias Úteis / Mês
+                    </label>
+                    <input type="number" id="salVtDias" step="1" min="1" max="31" value="22"
+                      class="w-full px-3 py-2 rounded-xl border border-slate-300 bg-white text-sm text-slate-900 focus:ring-2 focus:ring-blue-500 outline-none transition" />
+                  </div>
+                </div>
+                <div id="salVtResumoBox" class="text-[11px] text-slate-600 bg-white border border-slate-200/80 rounded-lg px-2.5 py-1.5 flex items-center justify-between">
+                  <span>Crédito VT: <strong class="text-emerald-700">R$ 242,00</strong></span>
+                  <span>Desc. Folha: <strong class="text-rose-600">- R$ 242,00</strong></span>
+                </div>
+              </div>
+
+              <p class="text-[11px] text-slate-500">
+                VR/VA inscrito no PAT é isento de INSS, IRRF e FGTS. O desconto de VT é limitado ao menor valor entre 6% do salário-base e o total de VT do mês.
+              </p>
+            </div>
+          </div>
+
+          <!-- Gráfico Visual de Distribuição do Pacote de Remuneração -->
+          <div class="mt-6 pt-5 border-t border-slate-100">
+            <h3 class="text-xs font-bold text-slate-700 uppercase tracking-wider mb-3">Composição do Pacote Total (Bruto + Benefícios)</h3>
+            <div class="w-full h-5 bg-slate-100 rounded-full overflow-hidden flex shadow-inner">
+              <div id="barLiquido" class="bg-blue-600 h-full transition-all duration-300" style="width: 65%"></div>
+              <div id="barBeneficios" class="bg-emerald-500 h-full transition-all duration-300" style="width: 15%"></div>
+              <div id="barInss" class="bg-amber-500 h-full transition-all duration-300" style="width: 10%"></div>
+              <div id="barIrrf" class="bg-rose-500 h-full transition-all duration-300" style="width: 7%"></div>
+              <div id="barOutros" class="bg-slate-400 h-full transition-all duration-300" style="width: 3%"></div>
+            </div>
+            <div class="grid grid-cols-2 sm:grid-cols-3 gap-2 mt-4 text-xs">
+              <div class="flex items-center justify-between bg-slate-50 px-2.5 py-2 rounded-lg">
+                <span class="flex items-center gap-1.5 font-medium text-slate-700">
+                  <span class="w-2.5 h-2.5 rounded-full bg-blue-600"></span> Líquido
+                </span>
+                <span id="legLiquidoPct" class="font-bold text-slate-900">0%</span>
+              </div>
+              <div class="flex items-center justify-between bg-slate-50 px-2.5 py-2 rounded-lg">
+                <span class="flex items-center gap-1.5 font-medium text-slate-700">
+                  <span class="w-2.5 h-2.5 rounded-full bg-emerald-500"></span> VR/VA+VT
+                </span>
+                <span id="legBeneficiosPct" class="font-bold text-slate-900">0%</span>
+              </div>
+              <div class="flex items-center justify-between bg-slate-50 px-2.5 py-2 rounded-lg">
+                <span class="flex items-center gap-1.5 font-medium text-slate-700">
+                  <span class="w-2.5 h-2.5 rounded-full bg-amber-500"></span> INSS
+                </span>
+                <span id="legInssPct" class="font-bold text-slate-900">0%</span>
+              </div>
+              <div class="flex items-center justify-between bg-slate-50 px-2.5 py-2 rounded-lg">
+                <span class="flex items-center gap-1.5 font-medium text-slate-700">
+                  <span class="w-2.5 h-2.5 rounded-full bg-rose-500"></span> IRRF
+                </span>
+                <span id="legIrrfPct" class="font-bold text-slate-900">0%</span>
+              </div>
+              <div class="flex items-center justify-between bg-slate-50 px-2.5 py-2 rounded-lg col-span-2 sm:col-span-2">
+                <span class="flex items-center gap-1.5 font-medium text-slate-700">
+                  <span class="w-2.5 h-2.5 rounded-full bg-slate-400"></span> Outros / Copart.
+                </span>
+                <span id="legOutrosPct" class="font-bold text-slate-900">0%</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Detalhamento do Holerite e Faixas -->
+        <div class="lg:col-span-7 space-y-5">
+          <!-- Cartões Resumo -->
+          <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-3.5">
+            <div class="bg-gradient-to-br from-blue-600 to-indigo-700 rounded-2xl p-4 text-white shadow-md print-card">
+              <span class="text-xs font-semibold text-blue-100 uppercase tracking-wider">Líquido em Conta</span>
+              <div id="salCardLiquido" class="text-xl font-extrabold mt-1">R$ 0,00</div>
+              <span id="salCardAliquotaTotal" class="text-[11px] text-blue-100 mt-1 inline-block">Desconto total: 0%</span>
+            </div>
+            <div class="bg-emerald-50 border border-emerald-200 rounded-2xl p-4 shadow-sm print-card">
+              <span class="text-xs font-semibold text-emerald-800 uppercase tracking-wider">Pacote Total Líquido</span>
+              <div id="salCardPacoteTotal" class="text-xl font-extrabold text-emerald-700 mt-1">R$ 0,00</div>
+              <span id="salCardBeneficiosSub" class="text-[11px] text-emerald-700 mt-1 inline-block">+ R$ 0,00 em cartões</span>
+            </div>
+            <div class="bg-white rounded-2xl border border-slate-200 p-4 shadow-sm print-card">
+              <span class="text-xs font-semibold text-slate-500 uppercase tracking-wider">Desconto INSS</span>
+              <div id="salCardInss" class="text-xl font-extrabold text-amber-600 mt-1">R$ 0,00</div>
+              <span id="salCardInssEfetiva" class="text-[11px] text-slate-500 mt-1 inline-block">Alíquota efetiva: 0%</span>
+            </div>
+            <div class="bg-white rounded-2xl border border-slate-200 p-4 shadow-sm print-card">
+              <span class="text-xs font-semibold text-slate-500 uppercase tracking-wider">Desconto IRRF</span>
+              <div id="salCardIrrf" class="text-xl font-extrabold text-rose-600 mt-1">R$ 0,00</div>
+              <span id="salCardIrrfEfetiva" class="text-[11px] text-slate-500 mt-1 inline-block">Alíquota efetiva: 0%</span>
+            </div>
+          </div>
+
+          <!-- Faixa Informativa de Depósito Mensal do FGTS -->
+          <div class="bg-slate-50 border border-slate-200/90 rounded-2xl px-4 py-3 flex flex-col sm:flex-row sm:items-center justify-between gap-2 text-xs print-card">
+            <div class="flex items-center gap-2 text-slate-700">
+              <span class="w-2.5 h-2.5 rounded-full bg-emerald-600 shrink-0"></span>
+              <span>
+                <strong>FGTS Mensal (8% sobre a remuneração — não descontado do salário):</strong>
+                Depositado pela empresa na conta vinculada da Caixa.
+              </span>
+            </div>
+            <div class="flex items-center gap-3 font-bold text-slate-900 shrink-0">
+              <span id="salFgtsMensalValor" class="text-emerald-700 text-sm">R$ 0,00/mês</span>
+              <span id="salFgtsAnualValor" class="text-slate-500 font-medium">(~R$ 0,00/ano)</span>
+            </div>
+          </div>
+
+          <!-- Tabela Holerite -->
+          <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden print-card">
+            <div class="px-5 py-4 border-b border-slate-100 flex items-center justify-between">
+              <h3 class="text-base font-bold text-slate-900">Demonstrativo de Pagamento Mensal</h3>
+              <span id="salMetodoIrrfBadge" class="text-xs font-semibold px-2.5 py-1 rounded-lg bg-blue-50 text-blue-700 border border-blue-200">
+                Desconto Simplificado IRRF
+              </span>
+            </div>
+            <table class="w-full text-left border-collapse">
+              <thead>
+                <tr class="bg-slate-50 border-b border-slate-200 text-[11px] font-bold text-slate-500 uppercase tracking-wider">
+                  <th class="py-3 px-5">Evento</th>
+                  <th class="py-3 px-4">Base / Referência</th>
+                  <th class="py-3 px-4 text-right">Proventos</th>
+                  <th class="py-3 px-5 text-right">Descontos</th>
+                </tr>
+              </thead>
+              <tbody id="tabelaHoleriteBody" class="divide-y divide-slate-100 text-sm">
+                <!-- Preenchido via JS -->
+              </tbody>
+            </table>
+          </div>
+
+          <!-- Memória de Cálculo Progressivo (INSS e IRRF) -->
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div class="bg-white rounded-2xl border border-slate-200 p-4 shadow-sm print-card">
+              <h4 class="text-xs font-bold text-slate-800 uppercase tracking-wider mb-2.5">Memória INSS Progressivo</h4>
+              <div id="memoriaInss" class="space-y-1.5 text-xs text-slate-600"></div>
+            </div>
+            <div class="bg-white rounded-2xl border border-slate-200 p-4 shadow-sm print-card">
+              <h4 class="text-xs font-bold text-slate-800 uppercase tracking-wider mb-2.5">Memória IRRF (Comparativo Legal vs Simplificado)</h4>
+              <div id="memoriaIrrf" class="space-y-1.5 text-xs text-slate-600"></div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ===================================================================== -->
+    <!-- ABA 3: FÉRIAS & 13º SALÁRIO                                           -->
+    <!-- ===================================================================== -->
+    <section id="tab-ferias13" class="tab-panel hidden space-y-6">
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 items-start">
+
+        <!-- CARD 1: SIMULADOR DE FÉRIAS -->
+        <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-5 sm:p-6 space-y-5 print-card">
+          <div class="border-b border-slate-100 pb-4">
+            <div class="flex items-center gap-2">
+              <span class="w-2.5 h-2.5 rounded-full bg-blue-600"></span>
+              <h2 class="text-base font-bold text-slate-900">Simulador de Férias CLT</h2>
+            </div>
+            <p class="text-xs text-slate-500 mt-0.5">Calcule férias + 1/3 constitucional, abono pecuniário e adiantamento de 13º</p>
+          </div>
+
+          <div class="space-y-4">
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <div>
+                <label for="ferSalario" class="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1.5">
+                  Salário Bruto (R$)
+                </label>
+                <input type="number" id="ferSalario" step="0.01" min="0" value="4200.00"
+                  class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-sm font-semibold text-slate-900 focus:ring-2 focus:ring-blue-500 outline-none" />
+              </div>
+              <div>
+                <label for="ferDias" class="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1.5">
+                  Dias de Descanso
+                </label>
+                <select id="ferDias"
+                  class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-sm font-medium text-slate-900 bg-white focus:ring-2 focus:ring-blue-500 outline-none">
+                  <option value="30">30 dias</option>
+                  <option value="20" selected>20 dias (com venda de 10 dias)</option>
+                  <option value="15">15 dias</option>
+                  <option value="10">10 dias</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <div>
+                <label for="ferDependentes" class="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1.5">
+                  Dependentes (IRRF)
+                </label>
+                <input type="number" id="ferDependentes" step="1" min="0" max="20" value="1"
+                  class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-sm text-slate-900 focus:ring-2 focus:ring-blue-500 outline-none" />
+              </div>
+              <div class="flex flex-col justify-center space-y-2 pt-1">
+                <label class="inline-flex items-center gap-2 cursor-pointer text-xs font-medium text-slate-700">
+                  <input type="checkbox" id="ferAbono" checked class="w-4 h-4 rounded text-blue-600 focus:ring-blue-500" />
+                  Vender 1/3 (Abono Pecuniário - 10 dias)
+                </label>
+                <label class="inline-flex items-center gap-2 cursor-pointer text-xs font-medium text-slate-700">
+                  <input type="checkbox" id="ferAdiantar13" class="w-4 h-4 rounded text-blue-600 focus:ring-blue-500" />
+                  Adiantar 1ª parcela do 13º (50%)
+                </label>
+              </div>
+            </div>
+          </div>
+
+          <!-- Resultado Férias -->
+          <div class="bg-slate-50 rounded-xl border border-slate-200 p-4 space-y-2.5 text-sm">
+            <div class="flex justify-between">
+              <span class="text-slate-600">Férias Proporcionais aos Dias:</span>
+              <span id="ferResValor" class="font-semibold text-slate-900">R$ 0,00</span>
+            </div>
+            <div class="flex justify-between">
+              <span class="text-slate-600">Adicional 1/3 Constitucional:</span>
+              <span id="ferResTerco" class="font-semibold text-slate-900">R$ 0,00</span>
+            </div>
+            <div class="flex justify-between">
+              <span class="text-slate-600">Abono Pecuniário + 1/3 (Isento INSS/IR):</span>
+              <span id="ferResAbono" class="font-semibold text-emerald-700">R$ 0,00</span>
+            </div>
+            <div class="flex justify-between">
+              <span class="text-slate-600">Adiantamento 1ª Parcela 13º:</span>
+              <span id="ferResAdiant13" class="font-semibold text-slate-900">R$ 0,00</span>
+            </div>
+            <div class="border-t border-slate-200 pt-2 flex justify-between text-rose-600">
+              <span>Desconto INSS Férias:</span>
+              <span id="ferResInss" class="font-semibold">- R$ 0,00</span>
+            </div>
+            <div class="flex justify-between text-rose-600">
+              <span>Desconto IRRF Férias:</span>
+              <span id="ferResIrrf" class="font-semibold">- R$ 0,00</span>
+            </div>
+            <div class="border-t-2 border-slate-300 pt-2.5 flex justify-between items-center">
+              <span class="font-bold text-slate-900">Líquido de Férias a Receber:</span>
+              <span id="ferResLiquido" class="text-lg font-extrabold text-blue-700">R$ 0,00</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- CARD 2: SIMULADOR DE 13º SALÁRIO -->
+        <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-5 sm:p-6 space-y-5 print-card">
+          <div class="border-b border-slate-100 pb-4">
+            <div class="flex items-center gap-2">
+              <span class="w-2.5 h-2.5 rounded-full bg-emerald-600"></span>
+              <h2 class="text-base font-bold text-slate-900">Simulador de 13º Salário (Gratificação Natalina)</h2>
+            </div>
+            <p class="text-xs text-slate-500 mt-0.5">Cálculo da 1ª parcela (até 30/nov) e 2ª parcela com impostos (até 20/dez)</p>
+          </div>
+
+          <div class="space-y-4">
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+              <div>
+                <label for="decSalario" class="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1.5">
+                  Salário Bruto (R$)
+                </label>
+                <input type="number" id="decSalario" step="0.01" min="0" value="4200.00"
+                  class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-sm font-semibold text-slate-900 focus:ring-2 focus:ring-blue-500 outline-none" />
+              </div>
+              <div>
+                <label for="decMeses" class="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1.5">
+                  Meses Trabalhados
+                </label>
+                <select id="decMeses"
+                  class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-sm font-medium text-slate-900 bg-white focus:ring-2 focus:ring-blue-500 outline-none">
+                  <option value="12" selected>12 meses (Integral)</option>
+                  <option value="11">11 meses</option>
+                  <option value="10">10 meses</option>
+                  <option value="9">9 meses</option>
+                  <option value="8">8 meses</option>
+                  <option value="7">7 meses</option>
+                  <option value="6">6 meses</option>
+                  <option value="5">5 meses</option>
+                  <option value="4">4 meses</option>
+                  <option value="3">3 meses</option>
+                  <option value="2">2 meses</option>
+                  <option value="1">1 mês</option>
+                </select>
+              </div>
+              <div>
+                <label for="decDependentes" class="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1.5">
+                  Dependentes
+                </label>
+                <input type="number" id="decDependentes" step="1" min="0" max="20" value="1"
+                  class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-sm text-slate-900 focus:ring-2 focus:ring-blue-500 outline-none" />
+              </div>
+            </div>
+          </div>
+
+          <!-- Resultado 13º Salário -->
+          <div class="bg-slate-50 rounded-xl border border-slate-200 p-4 space-y-2.5 text-sm">
+            <div class="flex justify-between">
+              <span class="text-slate-600">13º Salário Bruto Proporcional:</span>
+              <span id="decResBruto" class="font-bold text-slate-900">R$ 0,00</span>
+            </div>
+            <div class="bg-white rounded-lg p-3 border border-slate-200/80 flex justify-between items-center">
+              <div>
+                <span class="font-semibold text-slate-800 block">1ª Parcela (Adiantamento sem descontos)</span>
+                <span class="text-[11px] text-slate-500">50% do 13º bruto proporcionado</span>
+              </div>
+              <span id="decResPrimeira" class="text-base font-bold text-emerald-700">R$ 0,00</span>
+            </div>
+            <div class="border-t border-slate-200 pt-2 flex justify-between text-rose-600">
+              <span>INSS sobre 13º (calculado sobre o total):</span>
+              <span id="decResInss" class="font-semibold">- R$ 0,00</span>
+            </div>
+            <div class="flex justify-between text-rose-600">
+              <span>IRRF sobre 13º (tributação exclusiva):</span>
+              <span id="decResIrrf" class="font-semibold">- R$ 0,00</span>
+            </div>
+            <div class="bg-blue-50/80 rounded-lg p-3 border border-blue-200 flex justify-between items-center">
+              <div>
+                <span class="font-bold text-blue-950 block">2ª Parcela Líquida (Saldo Final)</span>
+                <span class="text-[11px] text-blue-700">Bruto menos 1ª parcela, INSS e IRRF</span>
+              </div>
+              <span id="decResSegunda" class="text-base font-extrabold text-blue-700">R$ 0,00</span>
+            </div>
+            <div class="border-t-2 border-slate-300 pt-2.5 flex justify-between items-center">
+              <span class="font-bold text-slate-900">Total Líquido (1ª + 2ª Parcela):</span>
+              <span id="decResTotalLiquido" class="text-lg font-extrabold text-slate-900">R$ 0,00</span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Rodapé Explicativo -->
+  <footer class="bg-white border-t border-slate-200 mt-auto">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-5">
+      <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 text-xs text-slate-500">
+        <p class="leading-relaxed">
+          <strong class="text-slate-700">Aviso Legal:</strong> Os valores exibidos nesta calculadora são estimativas baseadas na Consolidação das Leis do Trabalho (CLT), Lei 12.506/2011 e tabelas progressivas vigentes de INSS e IRRF (incluindo o comparativo automático com o desconto simplificado). Convenções coletivas, médias de horas extras, adicionais (insalubridade/periculosidade) e faltas podem alterar o cálculo final. Recomenda-se conferência com um contador ou sindicato da categoria.
+        </p>
+        <span class="whitespace-nowrap font-medium text-slate-400">CalcTrabalhista Pro • 2026</span>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Lógica Completa de Cálculos Trabalhistas e Tributários (2026) -->
+  <script>
+    const PARAMS_2026 = {
+      salarioMinimo: 1621.00,
+      inssFaixas: [
+        { limite: 1621.00, aliquota: 0.075, label: '7,5%' },
+        { limite: 2902.84, aliquota: 0.09,  label: '9,0%' },
+        { limite: 4354.27, aliquota: 0.12,  label: '12,0%' },
+        { limite: 8475.55, aliquota: 0.14,  label: '14,0%' }
+      ],
+      irrfFaixas: [
+        { limite: 2428.80, aliquota: 0.00,  deducao: 0.00 },
+        { limite: 2826.65, aliquota: 0.075, deducao: 182.16 },
+        { limite: 3751.05, aliquota: 0.15,  deducao: 394.16 },
+        { limite: 4664.68, aliquota: 0.225, deducao: 675.49 },
+        { limite: Infinity, aliquota: 0.275, deducao: 908.73 }
+      ],
+      deducaoPorDependente: 189.59,
+      descontoSimplificadoMensal: 607.20
+    };
+
+    function calcularAdicionaisEMedias({
+      salarioBase,
+      jornadaMensal = 220,
+      grauInsalubridade = 0,
+      temPericulosidade = false,
+      heDiurnaQtd = 0,
+      heDiurnaPct = 50,
+      horasNoturnasQtd = 0,
+      heNoturnaQtd = 0,
+      reducaoHoraNoturna = true,
+      incluirDsr = true
+    }) {
+      const valorInsalubridade = PARAMS_2026.salarioMinimo * grauInsalubridade;
+      const valorPericulosidade = temPericulosidade ? (salarioBase * 0.30) : 0;
+
+      const remuneracaoFixaMensal = salarioBase + valorInsalubridade + valorPericulosidade;
+      const valorHoraNormal = jornadaMensal > 0 ? (remuneracaoFixaMensal / jornadaMensal) : 0;
+
+      const fatorReducaoNoturna = reducaoHoraNoturna ? (60 / 52.5) : 1;
+
+      const horasNoturnasComputadas = horasNoturnasQtd * fatorReducaoNoturna;
+      const valorAdicionalNoturno = horasNoturnasComputadas * valorHoraNormal * 0.20;
+
+      const multiplicadorHeDiurna = 1 + (heDiurnaPct / 100);
+      const valorHeDiurna = heDiurnaQtd * valorHoraNormal * multiplicadorHeDiurna;
+
+      const horasHeNoturnaComputadas = heNoturnaQtd * fatorReducaoNoturna;
+      const valorHeNoturna = horasHeNoturnaComputadas * (valorHoraNormal * 1.20) * multiplicadorHeDiurna;
+
+      const subtotalVariaveis = valorAdicionalNoturno + valorHeDiurna + valorHeNoturna;
+      const valorDsr = incluirDsr ? (subtotalVariaveis * (5 / 25)) : 0;
+
+      const totalVariaveisComDsr = subtotalVariaveis + valorDsr;
+      const remuneracaoTotalMensal = remuneracaoFixaMensal + totalVariaveisComDsr;
+
+      return {
+        valorInsalubridade,
+        valorPericulosidade,
+        remuneracaoFixaMensal,
+        valorHoraNormal,
+        valorAdicionalNoturno,
+        valorHeDiurna,
+        valorHeNoturna,
+        valorDsr,
+        totalVariaveisComDsr,
+        remuneracaoTotalMensal
+      };
+    }
+
+    function formatBRL(valor) {
+      const num = isNaN(valor) || !isFinite(valor) ? 0 : valor;
+      return num.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+    }
+
+    function formatPct(valor) {
+      const num = isNaN(valor) || !isFinite(valor) ? 0 : valor;
+      return `${num.toFixed(2).replace('.', ',')}%`;
+    }
+
+    function parseDataLocal(str) {
+      if (!str) return null;
+      const partes = str.split('-').map(Number);
+      if (partes.length !== 3) return null;
+      return new Date(partes[0], partes[1] - 1, partes[2]);
+    }
+
+    function adicionarDias(data, dias) {
+      const nova = new Date(data.getTime());
+      nova.setDate(nova.getDate() + dias);
+      return nova;
+    }
+
+    function calcularTempoServico(inicio, fim) {
+      if (!inicio || !fim || fim < inicio) {
+        return { valido: false, anos: 0, meses: 0, dias: 0 };
+      }
+
+      let anos = fim.getFullYear() - inicio.getFullYear();
+      let meses = fim.getMonth() - inicio.getMonth();
+      let dias = fim.getDate() - inicio.getDate();
+
+      if (dias < 0) {
+        meses -= 1;
+        const ultimoDiaMesAnterior = new Date(fim.getFullYear(), fim.getMonth(), 0).getDate();
+        dias += ultimoDiaMesAnterior;
+      }
+      if (meses < 0) {
+        anos -= 1;
+        meses += 12;
+      }
+
+      return { valido: true, anos, meses, dias };
+    }
+
+    function calcularAvos13(admissao, dataFimProjetada) {
+      const anoRescisao = dataFimProjetada.getFullYear();
+      const inicioContagem = (admissao.getFullYear() === anoRescisao)
+        ? admissao
+        : new Date(anoRescisao, 0, 1);
+
+      if (dataFimProjetada < inicioContagem) return 0;
+
+      let avos = 0;
+      const mesInicial = inicioContagem.getMonth();
+      const mesFinal = dataFimProjetada.getMonth();
+
+      for (let m = mesInicial; m <= mesFinal; m++) {
+        const diaInicio = (m === mesInicial && admissao.getFullYear() === anoRescisao)
+          ? inicioContagem.getDate()
+          : 1;
+        const ultimoDiaMes = new Date(anoRescisao, m + 1, 0).getDate();
+        const diaFim = (m === mesFinal)
+          ? Math.min(30, dataFimProjetada.getDate())
+          : 30;
+
+        const diasTrabalhadosNoMes = Math.max(0, diaFim - Math.min(30, diaInicio) + 1);
+        if (diasTrabalhadosNoMes >= 15 || (m === mesFinal && dataFimProjetada.getDate() === ultimoDiaMes && ultimoDiaMes >= 15 && diaInicio === 1)) {
+          avos++;
+        }
+      }
+      return Math.min(12, Math.max(0, avos));
+    }
+
+    function calcularAvosFerias(admissao, dataFimProjetada) {
+      if (dataFimProjetada < admissao) return 0;
+
+      let inicioPeriodo = new Date(dataFimProjetada.getFullYear(), admissao.getMonth(), admissao.getDate());
+      if (inicioPeriodo > dataFimProjetada) {
+        inicioPeriodo = new Date(dataFimProjetada.getFullYear() - 1, admissao.getMonth(), admissao.getDate());
+      }
+
+      let mesesCompletos = (dataFimProjetada.getFullYear() - inicioPeriodo.getFullYear()) * 12
+        + (dataFimProjetada.getMonth() - inicioPeriodo.getMonth());
+
+      const diaAniversario = inicioPeriodo.getDate();
+      const diaFim = dataFimProjetada.getDate();
+
+      if (diaFim < diaAniversario) {
+        mesesCompletos -= 1;
+        const diasFracao = (30 - diaAniversario) + diaFim;
+        if (diasFracao >= 15) mesesCompletos += 1;
+      } else {
+        const diasFracao = diaFim - diaAniversario + 1;
+        if (diasFracao >= 15) mesesCompletos += 1;
+      }
+
+      return Math.min(12, Math.max(0, mesesCompletos));
+    }
+
+    function calcularFgtsAcumuladoEstimado(salario, tempo) {
+      if (!tempo || !tempo.valido || salario <= 0) {
+        return { saldoEstimado: 0, mesesTotais: 0, depositoMensal: 0 };
+      }
+
+      const mesesCompletos = (tempo.anos * 12) + tempo.meses + (tempo.dias >= 15 ? 1 : 0);
+      const mesesTotais = Math.max(1, mesesCompletos);
+      const depositoMensal = salario * 0.08;
+      const mesesEquivalentesCom13 = mesesTotais + (mesesTotais / 12);
+      const saldoEstimado = depositoMensal * mesesEquivalentesCom13;
+
+      return { saldoEstimado, mesesTotais, depositoMensal };
+    }
+
+    function calcularINSS(baseCalculo) {
+      if (baseCalculo <= 0) {
+        return { total: 0, aliquotaEfetiva: 0, detalhes: [] };
+      }
+
+      let total = 0;
+      let limiteAnterior = 0;
+      const detalhes = [];
+
+      for (const faixa of PARAMS_2026.inssFaixas) {
+        if (baseCalculo > limiteAnterior) {
+          const baseFaixa = Math.min(baseCalculo, faixa.limite) - limiteAnterior;
+          const valorFaixa = baseFaixa * faixa.aliquota;
+          total += valorFaixa;
+          detalhes.push({
+            faixa: faixa.label,
+            base: baseFaixa,
+            valor: valorFaixa
+          });
+          limiteAnterior = faixa.limite;
+        } else {
+          break;
+        }
+      }
+
+      const aliquotaEfetiva = (total / baseCalculo) * 100;
+      return { total, aliquotaEfetiva, detalhes };
+    }
+
+    function calcularIRRF(rendimentoTributavel, inssDescontado, dependentes = 0) {
+      if (rendimentoTributavel <= 0) {
+        return { total: 0, aliquotaEfetiva: 0, baseCalculo: 0, metodo: 'Isento', totalDeducoesLegais: 0 };
+      }
+
+      const totalDeducoesLegais = inssDescontado + (dependentes * PARAMS_2026.deducaoPorDependente);
+      const usarSimplificado = PARAMS_2026.descontoSimplificadoMensal > totalDeducoesLegais;
+      const deducaoAplicada = usarSimplificado ? PARAMS_2026.descontoSimplificadoMensal : totalDeducoesLegais;
+
+      const baseCalculo = Math.max(0, rendimentoTributavel - deducaoAplicada);
+      let imposto = 0;
+
+      for (const faixa of PARAMS_2026.irrfFaixas) {
+        if (baseCalculo <= faixa.limite) {
+          imposto = Math.max(0, (baseCalculo * faixa.aliquota) - faixa.deducao);
+          break;
+        }
+      }
+
+      const aliquotaEfetiva = (imposto / rendimentoTributavel) * 100;
+      const metodo = imposto === 0
+        ? 'Isento'
+        : (usarSimplificado ? 'Desconto Simplificado' : 'Deduções Legais');
+
+      return {
+        total: imposto,
+        aliquotaEfetiva,
+        baseCalculo,
+        metodo,
+        totalDeducoesLegais
+      };
+    }
+
+    let toastTimer = null;
+    function mostrarToast(mensagem) {
+      const banner = document.getElementById('toastBanner');
+      const msgEl = document.getElementById('toastMessage');
+      if (!banner || !msgEl) return;
+
+      msgEl.textContent = mensagem;
+      banner.classList.remove('hidden');
+      clearTimeout(toastTimer);
+      toastTimer = setTimeout(() => {
+        banner.classList.add('hidden');
+      }, 3200);
+    }
+
+    function sincronizarDiasUteisRescisao() {
+      const demissao = parseDataLocal(document.getElementById('resDemissao').value);
+      const diasUteisBase = parseInt(document.getElementById('resVrVaDiasMes').value, 10) || 22;
+      if (!demissao) return;
+
+      const diasCorridos = Math.min(30, demissao.getDate());
+      const estimativaDiasUteis = Math.min(diasUteisBase, Math.max(0, Math.round((diasCorridos / 30) * diasUteisBase)));
+
+      document.getElementById('resDiasUteisTrab').value = estimativaDiasUteis;
+      document.getElementById('resVtDiasTrab').value = estimativaDiasUteis;
+    }
+
+    function sincronizarHorasSoNoite(prefixo) {
+      const soNoite = document.getElementById(`${prefixo}SoNoite`).checked;
+      const jornada = parseInt(document.getElementById(`${prefixo}JornadaMensal`).value, 10) || 220;
+      const horasInput = document.getElementById(`${prefixo}HorasNoturnasQtd`);
+      const infoEl = document.getElementById(`${prefixo}SoNoiteInfo`);
+
+      if (!soNoite) {
+        infoEl.textContent = 'Turno misto / manual';
+        return;
+      }
+
+      const horasEstimadas = Math.round((jornada / 220) * 140);
+      horasInput.value = horasEstimadas;
+      infoEl.textContent = `Est. ${horasEstimadas}h/mês (editável)`;
+    }
+
+    function horaParaMinutos(horaStr) {
+      if (!horaStr || !horaStr.includes(':')) return null;
+      const [h, m] = horaStr.split(':').map(Number);
+      if (isNaN(h) || isNaN(m)) return null;
+      return (h * 60) + m;
+    }
+
+    function calcularHorarioDiario(entradaStr, saidaStr, intervaloMin = 60) {
+      const inicio = horaParaMinutos(entradaStr);
+      let fim = horaParaMinutos(saidaStr);
+      if (inicio === null || fim === null) {
+        return { horasTrabalhadasDia: 8, horasNoturnasDia: 0, horasNoturnasMes: 0 };
+      }
+
+      if (fim <= inicio) {
+        fim += 24 * 60;
+      }
+
+      const intervalo = Math.max(0, parseInt(intervaloMin, 10) || 0);
+      const minutosBrutos = Math.max(0, fim - inicio);
+      const minutosLiquidos = Math.max(0, minutosBrutos - intervalo);
+      const horasTrabalhadasDia = minutosLiquidos / 60;
+
+      let minutosNoturnos = 0;
+      for (const offsetDia of [0, 24 * 60]) {
+        const janInicio = offsetDia + (22 * 60);
+        const janFim = offsetDia + (29 * 60);
+        const interIni = Math.max(inicio, janInicio);
+        const interFim = Math.min(fim, janFim);
+        if (interFim > interIni) {
+          minutosNoturnos += (interFim - interIni);
+        }
+      }
+
+      if (minutosBrutos > 0 && minutosNoturnos > 0 && intervalo > 0) {
+        const proporcaoNoturnaNoTurno = minutosNoturnos / minutosBrutos;
+        minutosNoturnos = Math.max(0, minutosNoturnos - (intervalo * proporcaoNoturnaNoTurno));
+      }
+
+      const horasNoturnasDia = minutosNoturnos / 60;
+      const horasNoturnasMes = Number((horasNoturnasDia * 22).toFixed(1));
+
+      return { horasTrabalhadasDia, horasNoturnasDia, horasNoturnasMes };
+    }
+
+    function atualizarResumoHorario(prefixo, aplicarHoras = false) {
+      const entrada = document.getElementById(`${prefixo}HoraEntrada`).value;
+      const saida = document.getElementById(`${prefixo}HoraSaida`).value;
+      const intervalo = document.getElementById(`${prefixo}IntervaloMin`).value;
+      const resumoEl = document.getElementById(`${prefixo}HorarioResumo`);
+      const infoNoiteEl = document.getElementById(`${prefixo}SoNoiteInfo`);
+      const soNoiteEl = document.getElementById(`${prefixo}SoNoite`);
+
+      const calc = calcularHorarioDiario(entrada, saida, intervalo);
+      resumoEl.textContent = `Jornada: ${calc.horasTrabalhadasDia.toFixed(1).replace('.', ',')}h/dia • Noturno: ${calc.horasNoturnasDia.toFixed(1).replace('.', ',')}h/dia`;
+
+      if (calc.horasNoturnasDia >= 5 && !soNoiteEl.checked) {
+        soNoiteEl.checked = true;
+      }
+
+      if (aplicarHoras) {
+        document.getElementById(`${prefixo}HorasNoturnasQtd`).value = calc.horasNoturnasMes;
+        if (infoNoiteEl) {
+          infoNoiteEl.textContent = `Escala: ${calc.horasNoturnasMes}h/mês`;
+        }
+      }
+    }
+
+    function atualizarCalculoRescisao() {
+      const salario = parseFloat(document.getElementById('resSalario').value) || 0;
+      const jornadaMensal = parseInt(document.getElementById('resJornadaMensal').value, 10) || 220;
+      const grauInsalubridade = parseFloat(document.getElementById('resInsalubridade').value) || 0;
+      const temPericulosidade = document.getElementById('resPericulosidade').checked;
+      const soNoite = document.getElementById('resSoNoite').checked;
+      const heDiurnaQtd = parseFloat(document.getElementById('resHeDiurnaQtd').value) || 0;
+      const heDiurnaPct = parseFloat(document.getElementById('resHeDiurnaPct').value) || 50;
+      const horasNoturnasQtd = parseFloat(document.getElementById('resHorasNoturnasQtd').value) || 0;
+      const heNoturnaQtd = parseFloat(document.getElementById('resHeNoturnaQtd').value) || 0;
+      const reducaoHoraNoturna = document.getElementById('resReducaoHoraNoturna').checked;
+      const incluirDsr = document.getElementById('resIncluirDsr').checked;
+
+      const comp = calcularAdicionaisEMedias({
+        salarioBase: salario,
+        jornadaMensal,
+        grauInsalubridade,
+        temPericulosidade,
+        heDiurnaQtd,
+        heDiurnaPct,
+        horasNoturnasQtd,
+        heNoturnaQtd,
+        reducaoHoraNoturna,
+        incluirDsr
+      });
+
+      const regimeNoturnoLabel = soNoite ? ' • Só noite' : '';
+      document.getElementById('resRemuneracaoBaseBadge').textContent = `Remun. Total: ${formatBRL(comp.remuneracaoTotalMensal)}${regimeNoturnoLabel}`;
+      document.getElementById('resAdicionaisResumoBox').innerHTML = `
+        <div class="flex justify-between">
+          <span>Insalub./Pericul.: <strong class="text-slate-900">${formatBRL(comp.valorInsalubridade + comp.valorPericulosidade)}</strong></span>
+          <span>Adic. Noturno: <strong class="text-slate-900">${formatBRL(comp.valorAdicionalNoturno)}</strong></span>
+        </div>
+        <div class="flex justify-between">
+          <span>Média HE (Diur.+Not.+DSR): <strong class="text-indigo-700">${formatBRL(comp.valorHeDiurna + comp.valorHeNoturna + comp.valorDsr)}/mês</strong></span>
+          <span>Hora Base: <strong class="text-slate-900">${formatBRL(comp.valorHoraNormal)}</strong></span>
+        </div>
+      `;
+
+      const admissao = parseDataLocal(document.getElementById('resAdmissao').value);
+      const demissao = parseDataLocal(document.getElementById('resDemissao').value);
+      const motivo = document.getElementById('resMotivo').value;
+      const avisoTipo = document.getElementById('resAviso').value;
+      const fgtsAuto = document.getElementById('resFgtsAuto').checked;
+      const fgtsInputEl = document.getElementById('resFgtsSaldo');
+      const fgtsAutoInfoEl = document.getElementById('resFgtsAutoInfo');
+      const dependentes = parseInt(document.getElementById('resDependentes').value, 10) || 0;
+      const temFeriasVencidas = document.getElementById('resFeriasVencidas').checked;
+
+      const vrVaDiaria = parseFloat(document.getElementById('resVrVaDiaria').value) || 0;
+      const vrVaDiasMes = Math.max(1, parseInt(document.getElementById('resVrVaDiasMes').value, 10) || 22);
+      const vrVaMensal = vrVaDiaria * vrVaDiasMes;
+      const vrVaCopartPct = Math.min(20, Math.max(0, parseFloat(document.getElementById('resVrVaCopart').value) || 0));
+      const diasUteisTrab = Math.max(0, parseInt(document.getElementById('resDiasUteisTrab').value, 10) || 0);
+      const vrVaModo = document.getElementById('resVrVaModo').value;
+
+      const vtDiaria = parseFloat(document.getElementById('resVtDiaria').value) || 0;
+      const vtDiasTrab = Math.max(0, parseInt(document.getElementById('resVtDiasTrab').value, 10) || 0);
+      const vtOptante = document.getElementById('resVtOptante').checked;
+
+      document.getElementById('resVrVaMensalPreview').textContent = `Base mês: ${formatBRL(vrVaMensal)}`;
+
+      const tempo = calcularTempoServico(admissao, demissao);
+      const tempoEl = document.getElementById('tempoCasaTexto');
+
+      if (!tempo.valido) {
+        tempoEl.textContent = 'Data de demissão anterior à admissão';
+        tempoEl.classList.remove('text-blue-700');
+        tempoEl.classList.add('text-rose-600');
+        return;
+      } else {
+        tempoEl.classList.remove('text-rose-600');
+        tempoEl.classList.add('text-blue-700');
+        tempoEl.textContent = `${tempo.anos} ano(s), ${tempo.meses} mês(es) e ${tempo.dias} dia(s)`;
+      }
+
+      const estimativaFgts = calcularFgtsAcumuladoEstimado(comp.remuneracaoTotalMensal, tempo);
+      let fgtsSaldo = parseFloat(fgtsInputEl.value) || 0;
+
+      if (fgtsAuto) {
+        fgtsSaldo = Number(estimativaFgts.saldoEstimado.toFixed(2));
+        fgtsInputEl.value = fgtsSaldo.toFixed(2);
+        fgtsInputEl.readOnly = true;
+        fgtsInputEl.classList.add('bg-slate-50', 'text-emerald-800');
+        fgtsAutoInfoEl.textContent = `Auto: ${formatBRL(estimativaFgts.depositoMensal)}/mês × ~${estimativaFgts.mesesTotais}m (+13º)`;
+      } else {
+        fgtsInputEl.readOnly = false;
+        fgtsInputEl.classList.remove('bg-slate-50', 'text-emerald-800');
+        fgtsAutoInfoEl.textContent = `Sugestão auto: ${formatBRL(estimativaFgts.saldoEstimado)} (${estimativaFgts.mesesTotais} meses)`;
+      }
+
+      const diasMesDemissao = Math.min(30, demissao.getDate());
+      const fatorDiasMes = diasMesDemissao / 30;
+      const saldoSalario = salario * fatorDiasMes;
+      const saldoInsalubridade = comp.valorInsalubridade * fatorDiasMes;
+      const saldoPericulosidade = comp.valorPericulosidade * fatorDiasMes;
+      const saldoVariaveisMes = comp.totalVariaveisComDsr * fatorDiasMes;
+      const totalSaldoRemuneracaoMes = saldoSalario + saldoInsalubridade + saldoPericulosidade + saldoVariaveisMes;
+
+      const remunIntegral = comp.remuneracaoTotalMensal;
+
+      const diasAvisoTotal = Math.min(90, 30 + (tempo.anos * 3));
+      let valorAvisoIndenizado = 0;
+      let descontoAvisoNaoCumprido = 0;
+      let diasProjecaoAviso = 0;
+
+      if (motivo === 'sem_justa_causa' && avisoTipo === 'indenizado') {
+        valorAvisoIndenizado = (remunIntegral / 30) * diasAvisoTotal;
+        diasProjecaoAviso = diasAvisoTotal;
+      } else if (motivo === 'acordo' && avisoTipo === 'indenizado') {
+        valorAvisoIndenizado = ((remunIntegral / 30) * diasAvisoTotal) * 0.5;
+        diasProjecaoAviso = diasAvisoTotal;
+      } else if (motivo === 'pedido_demissao' && avisoTipo === 'nao_cumprido') {
+        descontoAvisoNaoCumprido = comp.remuneracaoFixaMensal;
+      }
+
+      const dataFimProjetada = diasProjecaoAviso > 0 ? adicionarDias(demissao, diasProjecaoAviso) : demissao;
+
+      let avos13 = 0;
+      let valor13Proporcional = 0;
+      if (motivo !== 'justa_causa') {
+        avos13 = calcularAvos13(admissao, dataFimProjetada);
+        valor13Proporcional = (remunIntegral / 12) * avos13;
+      }
+
+      let avosFerias = 0;
+      let valorFeriasProp = 0;
+      let tercoFeriasProp = 0;
+      if (motivo !== 'justa_causa') {
+        avosFerias = calcularAvosFerias(admissao, dataFimProjetada);
+        valorFeriasProp = (remunIntegral / 12) * avosFerias;
+        tercoFeriasProp = valorFeriasProp / 3;
+      }
+
+      const valorFeriasVencidas = temFeriasVencidas ? remunIntegral : 0;
+      const tercoFeriasVencidas = temFeriasVencidas ? (remunIntegral / 3) : 0;
+
+      let saldoVrVaProvento = 0;
+      let descontoVrVa = 0;
+      const vrVaProporcional = vrVaDiaria * diasUteisTrab;
+      const copartVrVaProporcional = vrVaProporcional * (vrVaCopartPct / 100);
+      const diasUteisRestantes = Math.max(0, vrVaDiasMes - diasUteisTrab);
+
+      if (vrVaDiaria > 0 && vrVaModo !== 'ignorar') {
+        if (vrVaModo === 'receber_prop') {
+          saldoVrVaProvento = vrVaProporcional;
+          descontoVrVa = copartVrVaProporcional;
+        } else if (vrVaModo === 'descontar_nao_trab') {
+          descontoVrVa = (vrVaDiaria * diasUteisRestantes) + copartVrVaProporcional;
+        }
+      }
+
+      const vrVaResumoBox = document.getElementById('resVrVaResumoBox');
+      if (vrVaModo === 'ignorar' || vrVaDiaria <= 0) {
+        vrVaResumoBox.innerHTML = `<span class="text-slate-400">VR/VA não considerado na rescisão.</span>`;
+      } else if (vrVaModo === 'receber_prop') {
+        vrVaResumoBox.innerHTML = `
+          <span>A receber (${diasUteisTrab}d × ${formatBRL(vrVaDiaria)}): <strong class="text-emerald-700">+ ${formatBRL(saldoVrVaProvento)}</strong></span>
+          <span>Copart. (${vrVaCopartPct}%): <strong class="text-rose-600">- ${formatBRL(descontoVrVa)}</strong></span>
+        `;
+      } else {
+        vrVaResumoBox.innerHTML = `
+          <span>Dias rest. (${diasUteisRestantes}d): <strong class="text-rose-600">- ${formatBRL(vrVaDiaria * diasUteisRestantes)}</strong></span>
+          <span>Copart. (${diasUteisTrab}d): <strong class="text-rose-600">- ${formatBRL(copartVrVaProporcional)}</strong></span>
+        `;
+      }
+
+      let descontoVtRescisao = 0;
+      let vtUtilizadoProp = 0;
+      if (vtOptante && vtDiaria > 0) {
+        vtUtilizadoProp = vtDiaria * vtDiasTrab;
+        descontoVtRescisao = Math.min(saldoSalario * 0.06, vtUtilizadoProp);
+      }
+
+      const vtResumoBox = document.getElementById('resVtResumoBox');
+      if (!vtOptante || vtDiaria <= 0) {
+        vtResumoBox.innerHTML = `<span class="text-slate-400">Vale-Transporte desativado ou zerado.</span>`;
+      } else {
+        vtResumoBox.innerHTML = `
+          <span>VT Utilizado (${vtDiasTrab}d): <strong class="text-slate-900">${formatBRL(vtUtilizadoProp)}</strong></span>
+          <span>Desc. CLT (teto 6%): <strong class="text-rose-600">- ${formatBRL(descontoVtRescisao)}</strong></span>
+        `;
+      }
+
+      const inssSaldoSalario = calcularINSS(totalSaldoRemuneracaoMes).total;
+      const inss13Salario = calcularINSS(valor13Proporcional).total;
+
+      const irrfSaldoSalario = calcularIRRF(totalSaldoRemuneracaoMes, inssSaldoSalario, dependentes);
+      const irrf13Salario = calcularIRRF(valor13Proporcional, inss13Salario, dependentes);
+
+      const baseFgtsMes = totalSaldoRemuneracaoMes + valor13Proporcional + valorAvisoIndenizado;
+      const fgtsMes = baseFgtsMes * 0.08;
+      const saldoFgtsAtualizado = fgtsSaldo + fgtsMes;
+
+      let multaFgts = 0;
+      let percentualMulta = 0;
+      let statusSaque = 'Não libera saque (saldo retido)';
+
+      if (motivo === 'sem_justa_causa') {
+        percentualMulta = 40;
+        multaFgts = saldoFgtsAtualizado * 0.40;
+        statusSaque = 'Saque Integral + Seguro-Desemprego';
+      } else if (motivo === 'acordo') {
+        percentualMulta = 20;
+        multaFgts = saldoFgtsAtualizado * 0.20;
+        statusSaque = 'Saque de até 80% do FGTS (Sem Seguro)';
+      } else if (motivo === 'termino_experiencia') {
+        percentualMulta = 0;
+        statusSaque = 'Saque do FGTS depositado (Código 04)';
+      }
+
+      const saqueFgtsEstimado = (motivo === 'sem_justa_causa')
+        ? (saldoFgtsAtualizado + multaFgts)
+        : (motivo === 'acordo')
+          ? (saldoFgtsAtualizado * 0.80 + multaFgts)
+          : (motivo === 'termino_experiencia' ? saldoFgtsAtualizado : 0);
+
+      const linhas = [];
+
+      if (saldoSalario > 0) {
+        linhas.push({
+          nome: 'Saldo de Salário Base',
+          ref: `${diasMesDemissao}/30 dias`,
+          provento: saldoSalario,
+          desconto: 0
+        });
+      }
+      if (saldoInsalubridade > 0) {
+        linhas.push({
+          nome: `Adicional de Insalubridade (${(grauInsalubridade * 100).toFixed(0)}% s/ SM)`,
+          ref: `${diasMesDemissao}/30 dias`,
+          provento: saldoInsalubridade,
+          desconto: 0
+        });
+      }
+      if (saldoPericulosidade > 0) {
+        linhas.push({
+          nome: 'Adicional de Periculosidade (30%)',
+          ref: `${diasMesDemissao}/30 dias`,
+          provento: saldoPericulosidade,
+          desconto: 0
+        });
+      }
+      if (saldoVariaveisMes > 0) {
+        linhas.push({
+          nome: 'Horas Extras, Adicional Noturno e DSR Proporcionais',
+          ref: `${diasMesDemissao}/30 dias`,
+          provento: saldoVariaveisMes,
+          desconto: 0
+        });
+      }
+      if (valorAvisoIndenizado > 0) {
+        linhas.push({
+          nome: motivo === 'acordo' ? 'Aviso Prévio Indenizado (50% - Art. 484-A)' : 'Aviso Prévio Indenizado (c/ Médias)',
+          ref: `${diasAvisoTotal} dias`,
+          provento: valorAvisoIndenizado,
+          desconto: 0
+        });
+      }
+      if (valor13Proporcional > 0) {
+        linhas.push({
+          nome: comp.totalVariaveisComDsr > 0 || comp.valorInsalubridade > 0 || comp.valorPericulosidade > 0
+            ? '13º Salário Proporcional (c/ Adicionais e Médias)'
+            : '13º Salário Proporcional',
+          ref: `${avos13}/12 avos`,
+          provento: valor13Proporcional,
+          desconto: 0
+        });
+      }
+      if (valorFeriasProp > 0) {
+        linhas.push({
+          nome: comp.totalVariaveisComDsr > 0 || comp.valorInsalubridade > 0 || comp.valorPericulosidade > 0
+            ? 'Férias Proporcionais (c/ Adicionais e Médias)'
+            : 'Férias Proporcionais',
+          ref: `${avosFerias}/12 avos`,
+          provento: valorFeriasProp,
+          desconto: 0
+        });
+        linhas.push({
+          nome: 'Adicional 1/3 sobre Férias Proporcionais',
+          ref: '1/3 Const.',
+          provento: tercoFeriasProp,
+          desconto: 0
+        });
+      }
+      if (valorFeriasVencidas > 0) {
+        linhas.push({
+          nome: 'Férias Vencidas (Período Integral c/ Médias)',
+          ref: '12/12 avos',
+          provento: valorFeriasVencidas,
+          desconto: 0
+        });
+        linhas.push({
+          nome: 'Adicional 1/3 sobre Férias Vencidas',
+          ref: '1/3 Const.',
+          provento: tercoFeriasVencidas,
+          desconto: 0
+        });
+      }
+      if (saldoVrVaProvento > 0) {
+        linhas.push({
+          nome: `Saldo Vale-Refeição / Alimentação (${formatBRL(vrVaDiaria)}/dia)`,
+          ref: `${diasUteisTrab} dias úteis`,
+          provento: saldoVrVaProvento,
+          desconto: 0
+        });
+      }
+
+      if (inssSaldoSalario > 0) {
+        linhas.push({
+          nome: 'INSS sobre Saldo de Salário',
+          ref: 'Tabela Prog.',
+          provento: 0,
+          desconto: inssSaldoSalario
+        });
+      }
+      if (inss13Salario > 0) {
+        linhas.push({
+          nome: 'INSS sobre 13º Salário',
+          ref: 'Exclusivo 13º',
+          provento: 0,
+          desconto: inss13Salario
+        });
+      }
+      if (irrfSaldoSalario.total > 0) {
+        linhas.push({
+          nome: 'IRRF sobre Saldo de Salário',
+          ref: irrfSaldoSalario.metodo,
+          provento: 0,
+          desconto: irrfSaldoSalario.total
+        });
+      }
+      if (irrf13Salario.total > 0) {
+        linhas.push({
+          nome: 'IRRF sobre 13º Salário',
+          ref: 'Exclusivo Fonte',
+          provento: 0,
+          desconto: irrf13Salario.total
+        });
+      }
+      if (descontoVtRescisao > 0) {
+        linhas.push({
+          nome: `Desconto Vale-Transporte (${formatBRL(vtDiaria)}/dia - Limite 6%)`,
+          ref: `${vtDiasTrab} dias úteis`,
+          provento: 0,
+          desconto: descontoVtRescisao
+        });
+      }
+      if (descontoVrVa > 0) {
+        linhas.push({
+          nome: vrVaModo === 'descontar_nao_trab'
+            ? `Desconto VR/VA (${diasUteisRestantes}d não trab. + copart.)`
+            : `Coparticipação VR/VA (${vrVaCopartPct}% s/ ${diasUteisTrab}d)`,
+          ref: `${formatBRL(vrVaDiaria)}/dia`,
+          provento: 0,
+          desconto: descontoVrVa
+        });
+      }
+      if (descontoAvisoNaoCumprido > 0) {
+        linhas.push({
+          nome: 'Desconto Aviso Prévio Não Cumprido',
+          ref: '30 dias (Art. 487)',
+          provento: 0,
+          desconto: descontoAvisoNaoCumprido
+        });
+      }
+
+      const totalProventos = linhas.reduce((acc, item) => acc + item.provento, 0);
+      const totalDescontos = linhas.reduce((acc, item) => acc + item.desconto, 0);
+      const liquidoReceber = Math.max(0, totalProventos - totalDescontos);
+      const saldoLiquidoVrVa = Math.max(0, saldoVrVaProvento - (vrVaModo === 'receber_prop' ? descontoVrVa : 0));
+
+      document.getElementById('cardResBruto').textContent = formatBRL(totalProventos);
+      document.getElementById('cardResDescontos').textContent = `- ${formatBRL(totalDescontos)}`;
+      document.getElementById('cardResLiquido').textContent = formatBRL(liquidoReceber);
+      document.getElementById('cardResLiquidoSub').textContent = saldoLiquidoVrVa > 0
+        ? `Inclui ${formatBRL(saldoLiquidoVrVa)} de VR/VA`
+        : 'Depósito direto na rescisão';
+      document.getElementById('cardResFgtsTotal').textContent = formatBRL(saqueFgtsEstimado);
+      document.getElementById('cardResFgtsSub').textContent = percentualMulta > 0
+        ? `Inclui multa de ${percentualMulta}% (${formatBRL(multaFgts)})`
+        : 'Sem multa rescisória';
+
+      document.getElementById('badgeRegimeIr').textContent = `IRRF: ${irrfSaldoSalario.metodo}`;
+
+      const tbody = document.getElementById('tabelaRescisaoBody');
+      tbody.innerHTML = linhas.map(row => `
+        <tr class="hover:bg-slate-50/80 transition">
+          <td class="py-3 px-5 font-medium text-slate-800">${row.nome}</td>
+          <td class="py-3 px-4 text-xs text-slate-500">${row.ref}</td>
+          <td class="py-3 px-4 text-right font-semibold ${row.provento > 0 ? 'text-emerald-700' : 'text-slate-300'}">
+            ${row.provento > 0 ? formatBRL(row.provento) : '—'}
+          </td>
+          <td class="py-3 px-5 text-right font-semibold ${row.desconto > 0 ? 'text-rose-600' : 'text-slate-300'}">
+            ${row.desconto > 0 ? `- ${formatBRL(row.desconto)}` : '—'}
+          </td>
+        </tr>
+      `).join('');
+
+      document.getElementById('footResProventos').textContent = formatBRL(totalProventos);
+      document.getElementById('footResDescontos').textContent = `- ${formatBRL(totalDescontos)}`;
+
+      document.getElementById('fgtsMesValor').textContent = formatBRL(fgtsMes);
+      document.getElementById('fgtsMultaLabel').textContent = `Multa Rescisória FGTS (${percentualMulta}%)`;
+      document.getElementById('fgtsMultaValor').textContent = formatBRL(multaFgts);
+      document.getElementById('resBeneficiosResumo').textContent =
+        `VR/VA: ${formatBRL(saldoLiquidoVrVa)} | VT: ${formatBRL(vtUtilizadoProp)}`;
+      document.getElementById('fgtsStatusSaque').textContent = statusSaque;
+    }
+
+    function atualizarCalculoSalario() {
+      const brutoBase = parseFloat(document.getElementById('salBruto').value) || 0;
+      const jornadaMensal = parseInt(document.getElementById('salJornadaMensal').value, 10) || 220;
+      const grauInsalubridade = parseFloat(document.getElementById('salInsalubridade').value) || 0;
+      const temPericulosidade = document.getElementById('salPericulosidade').checked;
+      const heDiurnaQtd = parseFloat(document.getElementById('salHeDiurnaQtd').value) || 0;
+      const heDiurnaPct = parseFloat(document.getElementById('salHeDiurnaPct').value) || 50;
+      const horasNoturnasQtd = parseFloat(document.getElementById('salHorasNoturnasQtd').value) || 0;
+      const heNoturnaQtd = parseFloat(document.getElementById('salHeNoturnaQtd').value) || 0;
+      const reducaoHoraNoturna = document.getElementById('salReducaoHoraNoturna').checked;
+      const incluirDsr = document.getElementById('salIncluirDsr').checked;
+
+      const compSal = calcularAdicionaisEMedias({
+        salarioBase: brutoBase,
+        jornadaMensal,
+        grauInsalubridade,
+        temPericulosidade,
+        heDiurnaQtd,
+        heDiurnaPct,
+        horasNoturnasQtd,
+        heNoturnaQtd,
+        reducaoHoraNoturna,
+        incluirDsr
+      });
+
+      const totalAdicionaisSal = compSal.remuneracaoTotalMensal - brutoBase;
+      document.getElementById('salTotalAdicionaisBadge').textContent = `+ ${formatBRL(totalAdicionaisSal)}`;
+
+      const bruto = compSal.remuneracaoTotalMensal;
+      const dependentes = parseInt(document.getElementById('salDependentes').value, 10) || 0;
+      const outrosManuais = parseFloat(document.getElementById('salOutrosDescontos').value) || 0;
+
+      const vrVaDiaria = parseFloat(document.getElementById('salVrVaDiaria').value) || 0;
+      const vrVaDias = Math.max(0, parseInt(document.getElementById('salVrVaDias').value, 10) || 0);
+      const vrVaBruto = vrVaDiaria * vrVaDias;
+      const vrVaCopartPct = Math.min(20, Math.max(0, parseFloat(document.getElementById('salVrVaCopart').value) || 0));
+      const descontoCopartVrVa = vrVaBruto * (vrVaCopartPct / 100);
+
+      document.getElementById('salVrVaTotalPreview').textContent = `Total: ${formatBRL(vrVaBruto)}/mês`;
+
+      const vtDiaria = parseFloat(document.getElementById('salVtDiaria').value) || 0;
+      const vtDias = Math.max(0, parseInt(document.getElementById('salVtDias').value, 10) || 0);
+      const vtBruto = vtDiaria * vtDias;
+      const descontarVt = document.getElementById('salValeTransporte').checked;
+      const valorDescontoVt = (descontarVt && vtBruto > 0) ? Math.min(brutoBase * 0.06, vtBruto) : 0;
+
+      const salVtResumoBox = document.getElementById('salVtResumoBox');
+      if (!descontarVt || vtBruto <= 0) {
+        salVtResumoBox.innerHTML = `<span class="text-slate-400">Vale-Transporte não utilizado no mês.</span>`;
+      } else {
+        salVtResumoBox.innerHTML = `
+          <span>Crédito VT (${vtDias}d): <strong class="text-emerald-700">${formatBRL(vtBruto)}</strong></span>
+          <span>Desc. Folha: <strong class="text-rose-600">- ${formatBRL(valorDescontoVt)}</strong></span>
+        `;
+      }
+
+      const totalOutrosDescontos = outrosManuais + valorDescontoVt + descontoCopartVrVa;
+
+      const inss = calcularINSS(bruto);
+      const irrf = calcularIRRF(bruto, inss.total, dependentes);
+
+      const fgtsMensal = bruto * 0.08;
+      const fgtsAnualEstimado = fgtsMensal * 13;
+      document.getElementById('salFgtsMensalValor').textContent = `${formatBRL(fgtsMensal)}/mês`;
+      document.getElementById('salFgtsAnualValor').textContent = `(~${formatBRL(fgtsAnualEstimado)}/ano c/ 13º)`;
+
+      const totalDescontosFolha = inss.total + irrf.total + totalOutrosDescontos;
+      const liquidoEmConta = Math.max(0, bruto - totalDescontosFolha);
+
+      const totalBeneficiosCartao = vrVaBruto + (descontarVt ? vtBruto : 0);
+      const pacoteTotalLiquido = liquidoEmConta + totalBeneficiosCartao;
+
+      const pctDescontoTotal = bruto > 0 ? (totalDescontosFolha / bruto) * 100 : 0;
+
+      document.getElementById('salCardLiquido').textContent = formatBRL(liquidoEmConta);
+      document.getElementById('salCardAliquotaTotal').textContent = `Descontos s/ bruto: ${formatPct(pctDescontoTotal)}`;
+      document.getElementById('salCardPacoteTotal').textContent = formatBRL(pacoteTotalLiquido);
+      document.getElementById('salCardBeneficiosSub').textContent = `+ ${formatBRL(totalBeneficiosCartao)} em VR/VA e VT`;
+      document.getElementById('salCardInss').textContent = `- ${formatBRL(inss.total)}`;
+      document.getElementById('salCardInssEfetiva').textContent = `Alíquota efetiva: ${formatPct(inss.aliquotaEfetiva)}`;
+      document.getElementById('salCardIrrf').textContent = `- ${formatBRL(irrf.total)}`;
+      document.getElementById('salCardIrrfEfetiva').textContent = `Alíquota efetiva: ${formatPct(irrf.aliquotaEfetiva)}`;
+      document.getElementById('salMetodoIrrfBadge').textContent = irrf.metodo;
+
+      const baseTotalGrafico = bruto + totalBeneficiosCartao;
+      const pctLiq = baseTotalGrafico > 0 ? (liquidoEmConta / baseTotalGrafico) * 100 : 100;
+      const pctBenef = baseTotalGrafico > 0 ? (totalBeneficiosCartao / baseTotalGrafico) * 100 : 0;
+      const pctInss = baseTotalGrafico > 0 ? (inss.total / baseTotalGrafico) * 100 : 0;
+      const pctIrrf = baseTotalGrafico > 0 ? (irrf.total / baseTotalGrafico) * 100 : 0;
+      const pctOut = baseTotalGrafico > 0 ? (totalOutrosDescontos / baseTotalGrafico) * 100 : 0;
+
+      document.getElementById('barLiquido').style.width = `${pctLiq}%`;
+      document.getElementById('barBeneficios').style.width = `${pctBenef}%`;
+      document.getElementById('barInss').style.width = `${pctInss}%`;
+      document.getElementById('barIrrf').style.width = `${pctIrrf}%`;
+      document.getElementById('barOutros').style.width = `${pctOut}%`;
+
+      document.getElementById('legLiquidoPct').textContent = formatPct(pctLiq);
+      document.getElementById('legBeneficiosPct').textContent = formatPct(pctBenef);
+      document.getElementById('legInssPct').textContent = formatPct(pctInss);
+      document.getElementById('legIrrfPct').textContent = formatPct(pctIrrf);
+      document.getElementById('legOutrosPct').textContent = formatPct(pctOut);
+
+      const tbody = document.getElementById('tabelaHoleriteBody');
+      tbody.innerHTML = `
+        <tr>
+          <td class="py-3 px-5 font-medium text-slate-800">Salário Base Mensal</td>
+          <td class="py-3 px-4 text-xs text-slate-500">30 dias</td>
+          <td class="py-3 px-4 text-right font-semibold text-emerald-700">${formatBRL(brutoBase)}</td>
+          <td class="py-3 px-5 text-right text-slate-300">—</td>
+        </tr>
+        ${compSal.valorInsalubridade > 0 ? `
+        <tr>
+          <td class="py-3 px-5 font-medium text-slate-800">Adicional de Insalubridade (${(grauInsalubridade * 100).toFixed(0)}%)</td>
+          <td class="py-3 px-4 text-xs text-slate-500">Base SM ${formatBRL(PARAMS_2026.salarioMinimo)}</td>
+          <td class="py-3 px-4 text-right font-semibold text-emerald-700">${formatBRL(compSal.valorInsalubridade)}</td>
+          <td class="py-3 px-5 text-right text-slate-300">—</td>
+        </tr>` : ''}
+        ${compSal.valorPericulosidade > 0 ? `
+        <tr>
+          <td class="py-3 px-5 font-medium text-slate-800">Adicional de Periculosidade (30%)</td>
+          <td class="py-3 px-4 text-xs text-slate-500">30% s/ Salário Base</td>
+          <td class="py-3 px-4 text-right font-semibold text-emerald-700">${formatBRL(compSal.valorPericulosidade)}</td>
+          <td class="py-3 px-5 text-right text-slate-300">—</td>
+        </tr>` : ''}
+        ${compSal.valorAdicionalNoturno > 0 ? `
+        <tr>
+          <td class="py-3 px-5 font-medium text-slate-800">Adicional Noturno (20% • 22h–05h)</td>
+          <td class="py-3 px-4 text-xs text-slate-500">${horasNoturnasQtd}h ${reducaoHoraNoturna ? '(c/ red. 52m30s)' : ''}</td>
+          <td class="py-3 px-4 text-right font-semibold text-emerald-700">${formatBRL(compSal.valorAdicionalNoturno)}</td>
+          <td class="py-3 px-5 text-right text-slate-300">—</td>
+        </tr>` : ''}
+        ${compSal.valorHeDiurna > 0 ? `
+        <tr>
+          <td class="py-3 px-5 font-medium text-slate-800">Horas Extras Diurnas (+${heDiurnaPct}%)</td>
+          <td class="py-3 px-4 text-xs text-slate-500">${heDiurnaQtd}h (Hora: ${formatBRL(compSal.valorHoraNormal)})</td>
+          <td class="py-3 px-4 text-right font-semibold text-emerald-700">${formatBRL(compSal.valorHeDiurna)}</td>
+          <td class="py-3 px-5 text-right text-slate-300">—</td>
+        </tr>` : ''}
+        ${compSal.valorHeNoturna > 0 ? `
+        <tr>
+          <td class="py-3 px-5 font-medium text-slate-800">Horas Extras Noturnas (+20% e +${heDiurnaPct}%)</td>
+          <td class="py-3 px-4 text-xs text-slate-500">${heNoturnaQtd}h (OJ 97 SDI-1)</td>
+          <td class="py-3 px-4 text-right font-semibold text-emerald-700">${formatBRL(compSal.valorHeNoturna)}</td>
+          <td class="py-3 px-5 text-right text-slate-300">—</td>
+        </tr>` : ''}
+        ${compSal.valorDsr > 0 ? `
+        <tr>
+          <td class="py-3 px-5 font-medium text-slate-800">Reflexo DSR s/ Horas Extras e Noturno</td>
+          <td class="py-3 px-4 text-xs text-slate-500">Súmula 172 TST</td>
+          <td class="py-3 px-4 text-right font-semibold text-emerald-700">${formatBRL(compSal.valorDsr)}</td>
+          <td class="py-3 px-5 text-right text-slate-300">—</td>
+        </tr>` : ''}
+        ${vrVaBruto > 0 ? `
+        <tr class="bg-emerald-50/30">
+          <td class="py-3 px-5 font-medium text-slate-800">Crédito Vale-Refeição / Alimentação (${formatBRL(vrVaDiaria)}/dia)</td>
+          <td class="py-3 px-4 text-xs text-emerald-700 font-medium">${vrVaDias} dias úteis (Isento)</td>
+          <td class="py-3 px-4 text-right font-semibold text-emerald-700">${formatBRL(vrVaBruto)}</td>
+          <td class="py-3 px-5 text-right text-slate-300">—</td>
+        </tr>` : ''}
+        ${(descontarVt && vtBruto > 0) ? `
+        <tr class="bg-emerald-50/30">
+          <td class="py-3 px-5 font-medium text-slate-800">Crédito Vale-Transporte (${formatBRL(vtDiaria)}/dia)</td>
+          <td class="py-3 px-4 text-xs text-emerald-700 font-medium">${vtDias} dias úteis (Isento)</td>
+          <td class="py-3 px-4 text-right font-semibold text-emerald-700">${formatBRL(vtBruto)}</td>
+          <td class="py-3 px-5 text-right text-slate-300">—</td>
+        </tr>` : ''}
+        <tr>
+          <td class="py-3 px-5 font-medium text-slate-800">Contribuição Previdenciária (INSS)</td>
+          <td class="py-3 px-4 text-xs text-slate-500">${formatPct(inss.aliquotaEfetiva)} efetiva</td>
+          <td class="py-3 px-4 text-right text-slate-300">—</td>
+          <td class="py-3 px-5 text-right font-semibold text-amber-600">- ${formatBRL(inss.total)}</td>
+        </tr>
+        <tr>
+          <td class="py-3 px-5 font-medium text-slate-800">Imposto de Renda Retido na Fonte (IRRF)</td>
+          <td class="py-3 px-4 text-xs text-slate-500">${irrf.metodo}</td>
+          <td class="py-3 px-4 text-right text-slate-300">—</td>
+          <td class="py-3 px-5 text-right font-semibold text-rose-600">- ${formatBRL(irrf.total)}</td>
+        </tr>
+        ${valorDescontoVt > 0 ? `
+        <tr>
+          <td class="py-3 px-5 font-medium text-slate-800">Desconto Vale-Transporte (Limite 6%)</td>
+          <td class="py-3 px-4 text-xs text-slate-500">${valorDescontoVt < brutoBase * 0.06 ? 'Teto valor VT' : '6,0% s/ Sal. Base'}</td>
+          <td class="py-3 px-4 text-right text-slate-300">—</td>
+          <td class="py-3 px-5 text-right font-semibold text-slate-700">- ${formatBRL(valorDescontoVt)}</td>
+        </tr>` : ''}
+        ${descontoCopartVrVa > 0 ? `
+        <tr>
+          <td class="py-3 px-5 font-medium text-slate-800">Coparticipação VR / VA (PAT)</td>
+          <td class="py-3 px-4 text-xs text-slate-500">${vrVaCopartPct}% s/ Benefício</td>
+          <td class="py-3 px-4 text-right text-slate-300">—</td>
+          <td class="py-3 px-5 text-right font-semibold text-slate-700">- ${formatBRL(descontoCopartVrVa)}</td>
+        </tr>` : ''}
+        ${outrosManuais > 0 ? `
+        <tr>
+          <td class="py-3 px-5 font-medium text-slate-800">Outros Descontos / Convênios</td>
+          <td class="py-3 px-4 text-xs text-slate-500">Informado</td>
+          <td class="py-3 px-4 text-right text-slate-300">—</td>
+          <td class="py-3 px-5 text-right font-semibold text-slate-700">- ${formatBRL(outrosManuais)}</td>
+        </tr>` : ''}
+      `;
+
+      const memInssEl = document.getElementById('memoriaInss');
+      if (inss.detalhes.length === 0) {
+        memInssEl.innerHTML = '<p class="text-slate-400">Informe um salário maior que zero.</p>';
+      } else {
+        memInssEl.innerHTML = inss.detalhes.map(d => `
+          <div class="flex justify-between">
+            <span>${d.faixa} sobre ${formatBRL(d.base)}:</span>
+            <span class="font-semibold text-slate-800">${formatBRL(d.valor)}</span>
+          </div>
+        `).join('') + `
+          <div class="border-t border-slate-100 pt-1.5 mt-1.5 flex justify-between font-bold text-slate-900">
+            <span>Total INSS Retido:</span>
+            <span>${formatBRL(inss.total)}</span>
+          </div>`;
+      }
+
+      const memIrrfEl = document.getElementById('memoriaIrrf');
+      memIrrfEl.innerHTML = `
+        <div class="flex justify-between">
+          <span>Deduções Legais (INSS + Dep.):</span>
+          <span class="font-semibold text-slate-800">${formatBRL(irrf.totalDeducoesLegais || 0)}</span>
+        </div>
+        <div class="flex justify-between">
+          <span>Desconto Simplificado Padrão:</span>
+          <span class="font-semibold text-slate-800">${formatBRL(PARAMS_2026.descontoSimplificadoMensal)}</span>
+        </div>
+        <div class="flex justify-between">
+          <span>Base de Cálculo Aplicada:</span>
+          <span class="font-semibold text-slate-800">${formatBRL(irrf.baseCalculo)}</span>
+        </div>
+        <div class="border-t border-slate-100 pt-1.5 mt-1.5 flex justify-between font-bold text-blue-700">
+          <span>Regime Selecionado:</span>
+          <span>${irrf.metodo}</span>
+        </div>
+      `;
+    }
+
+    function atualizarSimuladorFerias() {
+      const salario = parseFloat(document.getElementById('ferSalario').value) || 0;
+      const dias = parseInt(document.getElementById('ferDias').value, 10) || 30;
+      const dependentes = parseInt(document.getElementById('ferDependentes').value, 10) || 0;
+      const venderAbono = document.getElementById('ferAbono').checked;
+      const adiantar13 = document.getElementById('ferAdiantar13').checked;
+
+      const valorFerias = (salario / 30) * dias;
+      const tercoFerias = valorFerias / 3;
+      const baseTributavelFerias = valorFerias + tercoFerias;
+
+      const diasAbono = venderAbono ? 10 : 0;
+      const valorAbonoTotal = venderAbono ? ((salario / 30) * diasAbono) * (4 / 3) : 0;
+
+      const valorAdiant13 = adiantar13 ? (salario * 0.5) : 0;
+
+      const inssFerias = calcularINSS(baseTributavelFerias).total;
+      const irrfFerias = calcularIRRF(baseTributavelFerias, inssFerias, dependentes).total;
+
+      const liquidoFerias = Math.max(0, baseTributavelFerias + valorAbonoTotal + valorAdiant13 - inssFerias - irrfFerias);
+
+      document.getElementById('ferResValor').textContent = formatBRL(valorFerias);
+      document.getElementById('ferResTerco').textContent = formatBRL(tercoFerias);
+      document.getElementById('ferResAbono').textContent = formatBRL(valorAbonoTotal);
+      document.getElementById('ferResAdiant13').textContent = formatBRL(valorAdiant13);
+      document.getElementById('ferResInss').textContent = `- ${formatBRL(inssFerias)}`;
+      document.getElementById('ferResIrrf').textContent = `- ${formatBRL(irrfFerias)}`;
+      document.getElementById('ferResLiquido').textContent = formatBRL(liquidoFerias);
+    }
+
+    function atualizarSimulador13() {
+      const salario = parseFloat(document.getElementById('decSalario').value) || 0;
+      const meses = parseInt(document.getElementById('decMeses').value, 10) || 12;
+      const dependentes = parseInt(document.getElementById('decDependentes').value, 10) || 0;
+
+      const bruto13 = (salario / 12) * meses;
+      const primeiraParcela = bruto13 * 0.5;
+
+      const inss13 = calcularINSS(bruto13).total;
+      const irrf13 = calcularIRRF(bruto13, inss13, dependentes).total;
+
+      const segundaParcela = Math.max(0, bruto13 - primeiraParcela - inss13 - irrf13);
+      const totalLiquido = primeiraParcela + segundaParcela;
+
+      document.getElementById('decResBruto').textContent = formatBRL(bruto13);
+      document.getElementById('decResPrimeira').textContent = formatBRL(primeiraParcela);
+      document.getElementById('decResInss').textContent = `- ${formatBRL(inss13)}`;
+      document.getElementById('decResIrrf').textContent = `- ${formatBRL(irrf13)}`;
+      document.getElementById('decResSegunda').textContent = formatBRL(segundaParcela);
+      document.getElementById('decResTotalLiquido').textContent = formatBRL(totalLiquido);
+    }
+
+    function inicializarEventos() {
+      const tabBtns = document.querySelectorAll('.tab-btn');
+      const tabPanels = document.querySelectorAll('.tab-panel');
+
+      tabBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+          const target = btn.getAttribute('data-tab');
+
+          tabBtns.forEach(b => {
+            b.classList.remove('border-blue-600', 'text-blue-600', 'font-semibold');
+            b.classList.add('border-transparent', 'text-slate-500', 'font-medium');
+          });
+          btn.classList.remove('border-transparent', 'text-slate-500', 'font-medium');
+          btn.classList.add('border-blue-600', 'text-blue-600', 'font-semibold');
+
+          tabPanels.forEach(panel => {
+            if (panel.id === `tab-${target}`) {
+              panel.classList.remove('hidden');
+            } else {
+              panel.classList.add('hidden');
+            }
+          });
+        });
+      });
+
+      ['resDemissao', 'resVrVaDiasMes'].forEach(id => {
+        document.getElementById(id).addEventListener('input', sincronizarDiasUteisRescisao);
+        document.getElementById(id).addEventListener('change', sincronizarDiasUteisRescisao);
+      });
+
+      ['resSoNoite', 'resJornadaMensal'].forEach(id => {
+        document.getElementById(id).addEventListener('change', (e) => {
+          if (e.target.id === 'resSoNoite' && e.target.checked) {
+            sincronizarHorasSoNoite('res');
+          } else if (e.target.id === 'resJornadaMensal' && document.getElementById('resSoNoite').checked) {
+            sincronizarHorasSoNoite('res');
+          } else if (e.target.id === 'resSoNoite' && !e.target.checked) {
+            sincronizarHorasSoNoite('res');
+          }
+          atualizarCalculoRescisao();
+        });
+      });
+
+      ['salSoNoite', 'salJornadaMensal'].forEach(id => {
+        document.getElementById(id).addEventListener('change', (e) => {
+          if (e.target.id === 'salSoNoite' && e.target.checked) {
+            sincronizarHorasSoNoite('sal');
+          } else if (e.target.id === 'salJornadaMensal' && document.getElementById('salSoNoite').checked) {
+            sincronizarHorasSoNoite('sal');
+          } else if (e.target.id === 'salSoNoite' && !e.target.checked) {
+            sincronizarHorasSoNoite('sal');
+          }
+          atualizarCalculoSalario();
+        });
+      });
+
+      ['resHoraEntrada', 'resHoraSaida', 'resIntervaloMin'].forEach(id => {
+        const handler = () => {
+          atualizarResumoHorario('res', true);
+          atualizarCalculoRescisao();
+        };
+        document.getElementById(id).addEventListener('input', handler);
+        document.getElementById(id).addEventListener('change', handler);
+      });
+      document.getElementById('resAplicarHorarioBtn').addEventListener('click', () => {
+        atualizarResumoHorario('res', true);
+        atualizarCalculoRescisao();
+        mostrarToast('Horas noturnas mensais atualizadas pelo horário informado.');
+      });
+
+      ['salHoraEntrada', 'salHoraSaida', 'salIntervaloMin'].forEach(id => {
+        const handler = () => {
+          atualizarResumoHorario('sal', true);
+          atualizarCalculoSalario();
+        };
+        document.getElementById(id).addEventListener('input', handler);
+        document.getElementById(id).addEventListener('change', handler);
+      });
+      document.getElementById('salAplicarHorarioBtn').addEventListener('click', () => {
+        atualizarResumoHorario('sal', true);
+        atualizarCalculoSalario();
+        mostrarToast('Horas noturnas mensais atualizadas pelo horário informado.');
+      });
+
+      ['resSalario', 'resJornadaMensal', 'resInsalubridade', 'resPericulosidade', 'resSoNoite',
+       'resHeDiurnaQtd', 'resHeDiurnaPct', 'resHorasNoturnasQtd', 'resHeNoturnaQtd',
+       'resReducaoHoraNoturna', 'resIncluirDsr',
+       'resAdmissao', 'resDemissao', 'resMotivo', 'resAviso', 'resFgtsSaldo', 'resFgtsAuto', 'resDependentes', 'resFeriasVencidas',
+       'resVrVaDiaria', 'resVrVaDiasMes', 'resVrVaCopart', 'resDiasUteisTrab', 'resVrVaModo',
+       'resVtDiaria', 'resVtDiasTrab', 'resVtOptante']
+        .forEach(id => {
+          document.getElementById(id).addEventListener('input', atualizarCalculoRescisao);
+          document.getElementById(id).addEventListener('change', atualizarCalculoRescisao);
+        });
+
+      ['salBruto', 'salJornadaMensal', 'salInsalubridade', 'salPericulosidade', 'salSoNoite',
+       'salHeDiurnaQtd', 'salHeDiurnaPct', 'salHorasNoturnasQtd', 'salHeNoturnaQtd',
+       'salReducaoHoraNoturna', 'salIncluirDsr',
+       'salDependentes', 'salOutrosDescontos', 'salValeTransporte',
+       'salVrVaDiaria', 'salVrVaDias', 'salVrVaCopart', 'salVtDiaria', 'salVtDias']
+        .forEach(id => {
+          document.getElementById(id).addEventListener('input', atualizarCalculoSalario);
+          document.getElementById(id).addEventListener('change', atualizarCalculoSalario);
+        });
+
+      ['ferSalario', 'ferDias', 'ferDependentes', 'ferAbono', 'ferAdiantar13']
+        .forEach(id => {
+          document.getElementById(id).addEventListener('input', atualizarSimuladorFerias);
+          document.getElementById(id).addEventListener('change', atualizarSimuladorFerias);
+        });
+
+      ['decSalario', 'decMeses', 'decDependentes']
+        .forEach(id => {
+          document.getElementById(id).addEventListener('input', atualizarSimulador13);
+          document.getElementById(id).addEventListener('change', atualizarSimulador13);
+        });
+
+      document.getElementById('btnLimparRescisao').addEventListener('click', () => {
+        document.getElementById('resSalario').value = '';
+        document.getElementById('resInsalubridade').value = '0';
+        document.getElementById('resPericulosidade').checked = false;
+        document.getElementById('resSoNoite').checked = false;
+        document.getElementById('resHeDiurnaQtd').value = '0';
+        document.getElementById('resHorasNoturnasQtd').value = '0';
+        document.getElementById('resHeNoturnaQtd').value = '0';
+        document.getElementById('resHoraEntrada').value = '08:00';
+        document.getElementById('resHoraSaida').value = '17:00';
+        document.getElementById('resIntervaloMin').value = '60';
+        document.getElementById('resFgtsAuto').checked = true;
+        document.getElementById('resFgtsSaldo').value = '0';
+        document.getElementById('resDependentes').value = '0';
+        document.getElementById('resFeriasVencidas').checked = false;
+        document.getElementById('resVrVaDiaria').value = '0';
+        document.getElementById('resVrVaCopart').value = '0';
+        document.getElementById('resVtDiaria').value = '0';
+        document.getElementById('resVtOptante').checked = false;
+        atualizarResumoHorario('res', false);
+        sincronizarHorasSoNoite('res');
+        atualizarCalculoRescisao();
+        mostrarToast('Campos da rescisão zerados.');
+      });
+
+      document.getElementById('btnLimparSalario').addEventListener('click', () => {
+        document.getElementById('salBruto').value = '';
+        document.getElementById('salInsalubridade').value = '0';
+        document.getElementById('salPericulosidade').checked = false;
+        document.getElementById('salSoNoite').checked = false;
+        document.getElementById('salHeDiurnaQtd').value = '0';
+        document.getElementById('salHorasNoturnasQtd').value = '0';
+        document.getElementById('salHeNoturnaQtd').value = '0';
+        document.getElementById('salHoraEntrada').value = '08:00';
+        document.getElementById('salHoraSaida').value = '17:00';
+        document.getElementById('salIntervaloMin').value = '60';
+        document.getElementById('salDependentes').value = '0';
+        document.getElementById('salOutrosDescontos').value = '0';
+        document.getElementById('salVrVaDiaria').value = '0';
+        document.getElementById('salVrVaCopart').value = '0';
+        document.getElementById('salVtDiaria').value = '0';
+        document.getElementById('salValeTransporte').checked = false;
+        atualizarResumoHorario('sal', false);
+        sincronizarHorasSoNoite('sal');
+        atualizarCalculoSalario();
+        mostrarToast('Campos do salário líquido zerados.');
+      });
+
+      document.getElementById('btnPreencherExemplo').addEventListener('click', () => {
+        document.getElementById('resSalario').value = '5200.00';
+        document.getElementById('resJornadaMensal').value = '220';
+        document.getElementById('resInsalubridade').value = '0';
+        document.getElementById('resPericulosidade').checked = true;
+        document.getElementById('resSoNoite').checked = false;
+        document.getElementById('resHoraEntrada').value = '14:00';
+        document.getElementById('resHoraSaida').value = '23:00';
+        document.getElementById('resIntervaloMin').value = '60';
+        document.getElementById('resHeDiurnaQtd').value = '12';
+        document.getElementById('resHeDiurnaPct').value = '50';
+        document.getElementById('resHorasNoturnasQtd').value = '30';
+        document.getElementById('resHeNoturnaQtd').value = '6';
+        document.getElementById('resReducaoHoraNoturna').checked = true;
+        document.getElementById('resIncluirDsr').checked = true;
+        document.getElementById('resAdmissao').value = '2022-05-02';
+        document.getElementById('resDemissao').value = '2026-11-18';
+        document.getElementById('resMotivo').value = 'sem_justa_causa';
+        document.getElementById('resAviso').value = 'indenizado';
+        document.getElementById('resFgtsAuto').checked = true;
+        document.getElementById('resDependentes').value = '2';
+        document.getElementById('resFeriasVencidas').checked = true;
+        document.getElementById('resVrVaDiaria').value = '35.00';
+        document.getElementById('resVrVaDiasMes').value = '22';
+        document.getElementById('resVrVaCopart').value = '5';
+        document.getElementById('resVrVaModo').value = 'receber_prop';
+        document.getElementById('resVtDiaria').value = '11.00';
+        document.getElementById('resVtOptante').checked = true;
+        sincronizarDiasUteisRescisao();
+        atualizarResumoHorario('res', false);
+        sincronizarHorasSoNoite('res');
+
+        document.getElementById('salBruto').value = '5200.00';
+        document.getElementById('salJornadaMensal').value = '220';
+        document.getElementById('salInsalubridade').value = '0';
+        document.getElementById('salPericulosidade').checked = true;
+        document.getElementById('salSoNoite').checked = false;
+        document.getElementById('salHoraEntrada').value = '14:00';
+        document.getElementById('salHoraSaida').value = '23:00';
+        document.getElementById('salIntervaloMin').value = '60';
+        document.getElementById('salHeDiurnaQtd').value = '12';
+        document.getElementById('salHeDiurnaPct').value = '50';
+        document.getElementById('salHorasNoturnasQtd').value = '30';
+        document.getElementById('salHeNoturnaQtd').value = '6';
+        document.getElementById('salReducaoHoraNoturna').checked = true;
+        document.getElementById('salIncluirDsr').checked = true;
+        document.getElementById('salDependentes').value = '2';
+        document.getElementById('salOutrosDescontos').value = '180.00';
+        document.getElementById('salVrVaDiaria').value = '35.00';
+        document.getElementById('salVrVaDias').value = '22';
+        document.getElementById('salVrVaCopart').value = '5';
+        document.getElementById('salVtDiaria').value = '11.00';
+        document.getElementById('salVtDias').value = '22';
+        document.getElementById('salValeTransporte').checked = true;
+        atualizarResumoHorario('sal', false);
+        sincronizarHorasSoNoite('sal');
+
+        document.getElementById('ferSalario').value = '6760.00';
+        document.getElementById('ferDias').value = '20';
+        document.getElementById('ferDependentes').value = '2';
+        document.getElementById('ferAbono').checked = true;
+        document.getElementById('ferAdiantar13').checked = true;
+
+        document.getElementById('decSalario').value = '6760.00';
+        document.getElementById('decMeses').value = '11';
+        document.getElementById('decDependentes').value = '2';
+
+        atualizarCalculoRescisao();
+        atualizarCalculoSalario();
+        atualizarSimuladorFerias();
+        atualizarSimulador13();
+
+        mostrarToast('Exemplo preenchido com Periculosidade, Adicional Noturno e Horas Extras!');
+      });
+
+      document.getElementById('btnImprimir').addEventListener('click', () => {
+        const agora = new Date();
+        document.getElementById('printTimestamp').textContent =
+          `Gerado em ${agora.toLocaleDateString('pt-BR')} às ${agora.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' })}`;
+        window.print();
+      });
+    }
+
+    window.addEventListener('DOMContentLoaded', () => {
+      inicializarEventos();
+      sincronizarDiasUteisRescisao();
+      atualizarResumoHorario('res', false);
+      atualizarResumoHorario('sal', false);
+      sincronizarHorasSoNoite('res');
+      sincronizarHorasSoNoite('sal');
+      atualizarCalculoRescisao();
+      atualizarCalculoSalario();
+      atualizarSimuladorFerias();
+      atualizarSimulador13();
+    });
+  </script>
+</body>
+</html>
